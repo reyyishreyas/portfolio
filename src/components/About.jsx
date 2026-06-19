@@ -1,0 +1,63 @@
+import { Database, Cpu, Zap } from 'lucide-react';
+
+export default function About() {
+  const pillars = [
+    {
+      icon: Database,
+      title: 'Machine Learning Engineering',
+      items: ['Data Processing', 'Model Development', 'Evaluation', 'Deployment'],
+      id: 'pillar-ml-engineering'
+    },
+    {
+      icon: Cpu,
+      title: 'Autonomous Systems',
+      items: ['Prediction', 'Simulation', 'Intelligent Decision Making'],
+      id: 'pillar-autonomous'
+    },
+    {
+      icon: Zap,
+      title: 'Applied AI',
+      items: ['Real-world AI Applications', 'Automation', 'Problem Solving'],
+      id: 'pillar-applied-ai'
+    }
+  ];
+
+  return (
+    <section id="about" className="reveal-element" aria-labelledby="title-about">
+      <div className="section-header">
+        <span className="section-label">Profile</span>
+        <h2 id="title-about" className="section-title">About</h2>
+        <p className="section-subtitle">
+          AI/ML Engineer building intelligent systems, ML applications, and autonomous technology solutions.
+        </p>
+      </div>
+
+      <div className="about-content">
+        <p className="about-description">
+          Artificial Intelligence and Machine Learning undergraduate with hands-on experience in building production ML systems, autonomous simulations, and explainable AI platforms. I specialize in deep learning architectures, ensemble methods, and deploying intelligent applications that solve real problems.
+        </p>
+
+        <div className="about-highlights">
+          {pillars.map((pillar) => (
+            <div key={pillar.id} id={pillar.id} className="highlight-card">
+              <div className="highlight-icon">
+                <pillar.icon size={22} strokeWidth={1.5} />
+              </div>
+              <div>
+                <h3 className="highlight-label" style={{ marginBottom: '8px' }}>{pillar.title}</h3>
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {pillar.items.map((item, i) => (
+                    <li key={i} style={{ fontSize: '13px', color: 'var(--text-secondary)', paddingLeft: '16px', position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: 0, color: 'var(--accent)', fontWeight: 700 }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
