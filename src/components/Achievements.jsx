@@ -1,4 +1,5 @@
 import { Trophy, Award } from 'lucide-react';
+import { StaggerGrid, RevealItem } from './Reveal';
 
 export default function Achievements() {
   const achievements = [
@@ -49,15 +50,16 @@ export default function Achievements() {
   );
 
   return (
-    <section id="achievements" className="reveal-element" aria-labelledby="title-achievements">
+    <section id="achievements" aria-labelledby="title-achievements">
       <div className="section-header">
         <span className="section-label">Achievements</span>
         <h2 id="title-achievements" className="section-title">Recognition & Awards</h2>
       </div>
 
-      <div className="achievements-grid">
+      <StaggerGrid className="achievements-grid">
         {achievements.map((item) => (
-          <div key={item.id} id={item.id} className="achievement-card">
+          <RevealItem key={item.id}>
+          <div id={item.id} className="achievement-card">
             <div className="achievement-badge">{item.badge}</div>
             <div className="achievement-title">{item.title}</div>
             <div className="achievement-subtitle">{item.subtitle}</div>
@@ -72,8 +74,9 @@ export default function Achievements() {
               View Achievement Post
             </a>
           </div>
+          </RevealItem>
         ))}
-      </div>
+      </StaggerGrid>
     </section>
   );
 }

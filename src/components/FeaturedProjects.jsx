@@ -1,4 +1,5 @@
 import ProjectCard from './ProjectCard';
+import { StaggerGrid, RevealItem } from './Reveal';
 
 export default function FeaturedProjects() {
   const projects = [
@@ -10,6 +11,7 @@ export default function FeaturedProjects() {
       tags: ['PyTorch', 'LSTM', 'GRU', 'Deep Learning', 'Python'],
       filepath: '/content/projects_ml/aerial_trajectory.md',
       githubUrl: 'https://github.com/reyyishreyas/Astra-chronus-ai-',
+      showTrajectory: true,
       problemStatement: 'Predicting aerial flight paths for autonomous systems requires handling complex temporal sequences accurately.',
       built: 'Built a deep recurrent neural network pipeline with synthetic data generation, MinMax scaling, and interactive 2D/3D trajectory visualization comparing predictions against ground truth.',
       techniques: 'LSTM, GRU, sequence-to-sequence modeling, early stopping, dropout regularization, MinMax scaling, multi-step window sequencing'
@@ -55,7 +57,7 @@ export default function FeaturedProjects() {
   return (
     <section id="projects" aria-labelledby="title-projects">
       <div style={{ marginBottom: 'var(--section-desktop)' }}>
-        <div className="section-header reveal-element">
+        <div className="section-header">
           <span className="section-label">Portfolio</span>
           <h2 id="title-projects" className="section-title">Featured AI Systems</h2>
           <p className="section-subtitle">
@@ -68,11 +70,13 @@ export default function FeaturedProjects() {
             <h3 className="projects-group-title">Machine Learning & AI</h3>
             <span className="projects-group-count">04 PROJECTS</span>
           </div>
-          <div className="case-studies-grid">
+          <StaggerGrid className="case-studies-grid">
             {projects.map((project) => (
-              <ProjectCard key={project.sysId} {...project} />
+              <RevealItem key={project.sysId}>
+                <ProjectCard {...project} />
+              </RevealItem>
             ))}
-          </div>
+          </StaggerGrid>
         </div>
       </div>
     </section>

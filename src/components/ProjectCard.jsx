@@ -1,8 +1,11 @@
-import { useMemo, useEffect, useState } from 'react';
+import { lazy, Suspense, useMemo, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { marked } from 'marked';
 import { X, ArrowRight } from 'lucide-react';
 
-export default function ProjectCard({ filepath, name, summary, impact, tags, sysId, githubUrl, problemStatement, built, techniques }) {
+const TrajectoryRibbon = lazy(() => import('./TrajectoryRibbon'));
+
+export default function ProjectCard({ filepath, name, summary, impact, tags, sysId, githubUrl, problemStatement, built, techniques, showTrajectory }) {
   const [htmlContent, setHtmlContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -93,6 +96,12 @@ export default function ProjectCard({ filepath, name, summary, impact, tags, sys
         )}
       </div>
 
+      {showTrajectory && (
+        <Suspense fallback={<div className="case-study-visual" />}>
+          <TrajectoryRibbon />
+        </Suspense>
+      )}
+
       <div className="case-study-footer">
         <div className="case-study-tags">
           {tags.map((tag) => (
@@ -137,16 +146,17 @@ export default function ProjectCard({ filepath, name, summary, impact, tags, sys
         </div>
       </div>
     </article>
-  ), [sysId, impact, name, problemStatement, summary, built, techniques, tags, githubUrl]);
+  ), [sysId, impact, name, problemStatement, summary, built, techniques, tags, githubUrl, showTrajectory]);
 
   return (
     <>
       {cardInner}
 
-      <div
-        className={`modal-overlay ${isModalOpen ? 'open' : ''}`}
-        onClick={() => setIsModalOpen(false)}
-      >
+      {createPortal(
+        <div
+          className={`modal-overlay ${isModalOpen ? 'open' : ''}`}
+          onClick={() => setIsModalOpen(false)}
+        >
         <div
           className="modal-drawer"
           onClick={(e) => e.stopPropagation()}
@@ -166,7 +176,7 @@ export default function ProjectCard({ filepath, name, summary, impact, tags, sys
             </button>
           </div>
 
-          <div className="modal-body">
+          <div className="modal-body" data-lenis-prevent>
             {loading && (
               <div style={{ color: 'var(--text-secondary)', fontSize: '14px', fontFamily: 'var(--font-mono)' }}>
                 Fetching architecture logs...
@@ -187,7 +197,9 @@ export default function ProjectCard({ filepath, name, summary, impact, tags, sys
             )}
           </div>
         </div>
-      </div>
+        </div>,
+        document.body
+      )}
     </>
   );
 }

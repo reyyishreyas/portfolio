@@ -9,7 +9,7 @@ export default function Experience() {
   ];
 
   return (
-    <section id="experience" className="reveal-element" aria-labelledby="title-experience" style={{ marginBottom: 'var(--section-desktop)' }}>
+    <section id="experience" aria-labelledby="title-experience" style={{ marginBottom: 'var(--section-desktop)' }}>
       <div className="section-header">
         <span className="section-label">Experience</span>
         <h2 id="title-experience" className="section-title">Professional Experience</h2>

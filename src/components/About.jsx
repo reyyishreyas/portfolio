@@ -1,4 +1,5 @@
 import { Database, Cpu, Zap } from 'lucide-react';
+import { StaggerGrid, RevealItem } from './Reveal';
 
 export default function About() {
   const pillars = [
@@ -23,7 +24,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="reveal-element" aria-labelledby="title-about">
+    <section id="about" aria-labelledby="title-about">
       <div className="section-header">
         <span className="section-label">Profile</span>
         <h2 id="title-about" className="section-title">About</h2>
@@ -37,9 +38,10 @@ export default function About() {
           Artificial Intelligence and Machine Learning undergraduate with hands-on experience in building production ML systems, autonomous simulations, and explainable AI platforms. I specialize in deep learning architectures, ensemble methods, and deploying intelligent applications that solve real problems.
         </p>
 
-        <div className="about-highlights">
+        <StaggerGrid className="about-highlights">
           {pillars.map((pillar) => (
-            <div key={pillar.id} id={pillar.id} className="highlight-card">
+            <RevealItem key={pillar.id}>
+              <div id={pillar.id} className="highlight-card">
               <div className="highlight-icon">
                 <pillar.icon size={22} strokeWidth={1.5} />
               </div>
@@ -55,8 +57,9 @@ export default function About() {
                 </ul>
               </div>
             </div>
+            </RevealItem>
           ))}
-        </div>
+        </StaggerGrid>
       </div>
     </section>
   );

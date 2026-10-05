@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { MotionConfig } from 'motion/react';
 import Loader from './components/Loader';
 import Header from './components/Header';
+import SiteHeader from './components/SiteHeader';
 import About from './components/About';
 import FeaturedProjects from './components/FeaturedProjects';
 import EngineeringProjects from './components/EngineeringProjects';
@@ -10,34 +12,16 @@ import Achievements from './components/Achievements';
 import Certifications from './components/Certifications';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
+import { Reveal } from './components/Reveal';
+import { initSmoothScroll } from './lib/smoothScroll';
 
 function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (loading) return;
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.12,
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    const revealElements = document.querySelectorAll('.reveal-element');
-    revealElements.forEach((el) => observer.observe(el));
-
-    return () => {
-      revealElements.forEach((el) => observer.unobserve(el));
-    };
+    if (loading) return undefined;
+    initSmoothScroll();
+    return undefined;
   }, [loading]);
 
   if (loading) {
@@ -45,69 +29,58 @@ function App() {
   }
 
   return (
-    <div className="portfolio-wrapper">
-      <nav className="nav-header">
-        <a href="#" className="nav-logo">Reyyi Shreyas</a>
-        <div className="nav-links">
-          <a href="#about" className="nav-link">About</a>
-          <a href="#projects" className="nav-link">Projects</a>
-          <a href="#experience" className="nav-link">Experience</a>
-          <a href="#leadership" className="nav-link">Leadership</a>
-          <a href="#achievements" className="nav-link">Achievements</a>
-          <a href="#skills" className="nav-link">Skills</a>
-          <a href="#contact" className="nav-link">Contact</a>
-        </div>
-      </nav>
+    <MotionConfig reducedMotion="user">
+      <div className="portfolio-wrapper">
+        <SiteHeader />
 
-      <div className="reveal-element">
         <Header />
-      </div>
 
-      <div className="reveal-element">
-        <About />
-      </div>
+        <Reveal>
+          <About />
+        </Reveal>
 
-      <div id="projects" className="reveal-element">
-        <FeaturedProjects />
-      </div>
+        <Reveal>
+          <FeaturedProjects />
+        </Reveal>
 
-      <div className="reveal-element">
-        <EngineeringProjects />
-      </div>
+        <Reveal>
+          <EngineeringProjects />
+        </Reveal>
 
-      <div className="reveal-element">
-        <Experience />
-      </div>
+        <Reveal>
+          <Experience />
+        </Reveal>
 
-      <div className="reveal-element">
-        <Leadership />
-      </div>
+        <Reveal>
+          <Leadership />
+        </Reveal>
 
-      <div id="achievements" className="reveal-element">
-        <Achievements />
-      </div>
+        <Reveal>
+          <Achievements />
+        </Reveal>
 
-      <div className="reveal-element">
-        <Certifications />
-      </div>
+        <Reveal>
+          <Certifications />
+        </Reveal>
 
-      <div id="skills" className="reveal-element">
-        <Skills />
-      </div>
+        <Reveal>
+          <Skills />
+        </Reveal>
 
-      <div className="reveal-element">
-        <Contact />
-      </div>
+        <Reveal>
+          <Contact />
+        </Reveal>
 
-      <footer className="footer reveal-element">
-        <div className="footer-credits">
-          © {new Date().getFullYear()} REYYI SHREYAS. ALL RIGHTS RESERVED.
-        </div>
-        <div className="footer-tagline">
-          AI/ML // AUTONOMOUS SYSTEMS // DEFENCE TECH
-        </div>
-      </footer>
-    </div>
+        <Reveal className="footer">
+          <div className="footer-credits">
+            © {new Date().getFullYear()} REYYI SHREYAS. ALL RIGHTS RESERVED.
+          </div>
+          <div className="footer-tagline">
+            AI/ML // AUTONOMOUS SYSTEMS // DEFENCE TECH
+          </div>
+        </Reveal>
+      </div>
+    </MotionConfig>
   );
 }
 

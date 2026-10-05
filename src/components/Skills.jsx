@@ -1,3 +1,5 @@
+import { StaggerGrid, RevealItem } from './Reveal';
+
 export default function Skills() {
   const skillGroups = [
     {
@@ -15,15 +17,16 @@ export default function Skills() {
   ];
 
   return (
-    <section id="skills" className="reveal-element" aria-labelledby="title-skills">
+    <section id="skills" aria-labelledby="title-skills">
       <div className="section-header">
         <span className="section-label">Technical Skills</span>
         <h2 id="title-skills" className="section-title">Skills & Technologies</h2>
       </div>
 
-      <div className="skills-grid">
+      <StaggerGrid className="skills-grid">
         {skillGroups.map((group, i) => (
-          <div key={i} className="skill-card">
+          <RevealItem key={i}>
+          <div className="skill-card">
             <h4 className="skill-card-title">{group.category}</h4>
             <div className="skill-badges">
               {group.skills.map((skill, j) => (
@@ -31,8 +34,9 @@ export default function Skills() {
               ))}
             </div>
           </div>
+          </RevealItem>
         ))}
-      </div>
+      </StaggerGrid>
     </section>
   );
 }

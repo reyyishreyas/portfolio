@@ -1,3 +1,5 @@
+import { StaggerGrid, RevealItem } from './Reveal';
+
 export default function EngineeringProjects() {
   const projects = [
     {
@@ -21,9 +23,10 @@ export default function EngineeringProjects() {
           <h3 id="title-engineering-projects" className="projects-group-title">Engineering Projects</h3>
           <span className="projects-group-count">01 PROJECT</span>
         </div>
-        <div className="case-studies-grid full-width">
+        <StaggerGrid className="case-studies-grid full-width">
           {projects.map((project) => (
-            <div key={project.sysId} className="case-study-card" id={project.sysId}>
+            <RevealItem key={project.sysId}>
+            <div className="case-study-card" id={project.sysId}>
               <div className="case-study-header">
                 <span className="case-study-impact-tag">{project.impact}</span>
                 <h4 className="case-study-title">{project.name}</h4>
@@ -91,8 +94,9 @@ export default function EngineeringProjects() {
                 </div>
               </div>
             </div>
+            </RevealItem>
           ))}
-        </div>
+        </StaggerGrid>
       </div>
     </section>
   );

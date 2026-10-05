@@ -29,7 +29,7 @@ export default function Certifications() {
   ];
 
   return (
-    <section id="certifications" className="reveal-element" aria-labelledby="title-certifications">
+    <section id="certifications" aria-labelledby="title-certifications">
       <div className="section-header">
         <span className="section-label">Certifications</span>
         <h2 id="title-certifications" className="section-title">Credentials</h2>
