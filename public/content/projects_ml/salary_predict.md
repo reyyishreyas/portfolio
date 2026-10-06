@@ -1,16 +1,16 @@
 # SalaryPredict AI
-## End-to-End Regression & Comparative Modelling Engine
+## End-to-end salary estimation with a benchmarked stacking ensemble
 
-An end-to-end salary estimation system that compares multiple regression models and serves predictions through a Flask dashboard.
+Delivered as the internship project at Launched Global on the program's ~19.5k-row, 29-feature salary dataset. 1st Place — Launched Global ML Expo.
 
 ### Core Metrics & Telemetry
-- **Model Type**: Regression Comparison (XGBoost, Gradient Boosting, Random Forest, Voting Ensembles)
-- **Primary Objective**: Low-variance compensation estimation
-- **Deployment Interface**: Flask-based RESTful service and visual dashboard
-- **Expo Rank**: 1st Place - Launched Global ML Expo
+- **Dataset**: ~19.5k rows · 29 features
+- **Best model**: stacking ensemble — MAE ₹5,791 (vs ₹41,512 for linear regression)
+- **Benchmark**: five regression approaches compared
+- **Deployment**: Flask app with bulk prediction and dashboards
 
 ### Technical Highlights
-- **Comparative Modeling**: Evaluated and compared several high-performance regression models (Random Forest, XGBoost, Gradient Boosting) using metrics like Mean Absolute Error (MAE) and R².
-- **End-to-End Workflow**: Built a complete ML pipeline covering preprocessing (imputation, encoding), feature selection, hyperparameter tuning, model training, and deployment.
-- **Flask Dashboard**: Developed an interactive web-based dashboard using Flask to take user details (experience, skills, location) and display compensation projections.
-- **Ensemble Voting**: Implemented an ensemble voting regressor that averages predictions from individual estimators to reduce prediction variance.
+- **Comparative benchmarking**: five regression approaches trained and compared on MAE and R² before shipping the winner.
+- **Stacking ensemble**: combines base regressors to cut error far below the linear baseline.
+- **Flask app**: single and bulk prediction with dashboards for exploring results.
+- **Fairness audit**: predictions audited by location, department and education.

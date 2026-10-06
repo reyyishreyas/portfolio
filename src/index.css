@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -282,6 +283,7 @@ html.lenis body {
    HERO
    ============================ */
 .hero-section {
+  position: relative;
   min-height: 87vh;
   display: grid;
   grid-template-columns: 1.3fr 0.7fr;
@@ -290,16 +292,32 @@ html.lenis body {
   padding: 24px 0 64px;
 }
 
+/* full-bleed backdrop: the forest's green-black carries into the hero,
+   then settles into the page's neutral black */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: -1px;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  background: linear-gradient(180deg, #0a100c 0%, var(--bg-void) 85%);
+  pointer-events: none;
+  z-index: -1;
+}
+
 .hero-left {
   display: flex;
   flex-direction: column;
 }
 
 .hero-title {
-  font-size: var(--text-display);
-  font-weight: 800;
-  letter-spacing: var(--tracking-display);
-  line-height: 0.98;
+  font-family: 'Fraunces', Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: clamp(2.6rem, 4.6vw, 4.4rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.04;
   margin-bottom: 22px;
   color: var(--text-primary);
   text-wrap: balance;
@@ -533,11 +551,13 @@ html.lenis body {
 }
 
 .section-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-optical-sizing: auto;
   font-size: var(--text-h2);
-  font-weight: 700;
-  letter-spacing: var(--tracking-tight);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
-  line-height: 1.05;
+  line-height: 1.12;
   text-wrap: balance;
 }
 
@@ -1766,5 +1786,1125 @@ html.lenis body {
 
   .nav-progress {
     display: none;
+  }
+}
+/* ── Forest opening ─────────────────────────────────────────── */
+
+.forest-opening {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  /* scroll travel for the pinned journey: 420vh of walking */
+  height: 520vh;
+  background: #0d130e;
+}
+
+.forest-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.forest-stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.forest-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(125% 95% at 50% 42%, transparent 62%, rgba(4, 7, 5, 0.42) 100%),
+    linear-gradient(to bottom, rgba(6, 9, 7, 0.45), transparent 16%, transparent 88%, rgba(6, 9, 7, 0.3));
+}
+
+/* static fallback when WebGL or reduced-motion rules out the scene */
+.forest-fallback {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  height: 88vh;
+  overflow: hidden;
+  background: #0d130e;
+}
+
+.forest-fallback-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #0b1116 0%, #16211a 45%, #1d2b1d 100%);
+}
+
+.forest-fallback svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.92;
+}
+
+.forest-fallback-mist {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(13, 19, 14, 0.9), transparent);
+}
+
+/* ── Forest audio gate ──────────────────────────────────────── */
+
+.forest-ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.forest-audio {
+  position: absolute;
+  top: 84px;
+  right: 24px;
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: rgba(9, 12, 9, 0.55);
+  border: 1px solid rgba(240, 234, 216, 0.25);
+  border-radius: 10px;
+  color: #f0ead8;
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(6px);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.forest-audio:hover,
+.forest-audio:focus-visible {
+  border-color: rgba(255, 235, 190, 0.75);
+  background: rgba(18, 24, 16, 0.7);
+}
+
+.forest-enter {
+  position: absolute;
+  left: 50%;
+  bottom: 11vh;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 15px 30px;
+  background: rgba(9, 12, 9, 0.55);
+  border: 1px solid rgba(240, 234, 216, 0.35);
+  border-radius: 12px;
+  color: #f0ead8;
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(8px);
+  transition: opacity 700ms ease, transform 700ms ease, border-color var(--transition-fast),
+    background var(--transition-fast);
+  animation: forest-enter-breathe 3.6s ease-in-out infinite;
+}
+
+.forest-enter.is-hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px);
+  pointer-events: none;
+  animation: none;
+}
+
+.forest-enter:hover,
+.forest-enter:focus-visible {
+  border-color: rgba(255, 235, 190, 0.8);
+  background: rgba(20, 26, 18, 0.72);
+}
+
+.forest-enter-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.forest-enter-hint {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(240, 234, 216, 0.6);
+  white-space: nowrap;
+}
+
+@keyframes forest-enter-breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 235, 190, 0); }
+  50% { box-shadow: 0 0 24px 0 rgba(255, 235, 190, 0.14); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .forest-enter { animation: none; }
+}
+
+/* ── Clearing identity reveal ────────────────────────────────── */
+
+.forest-identity {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform, filter;
+}
+
+.forest-identity.is-static {
+  opacity: 1;
+  position: absolute;
+  inset: 0;
+}
+
+.forest-identity-name {
+  font-family: 'Fraunces', Georgia, serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 6.5vw, 5rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f4efdf;
+  text-shadow: 0 2px 34px rgba(0, 0, 0, 0.6);
+}
+
+.forest-identity-rule {
+  display: block;
+  width: 74px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(244, 239, 223, 0.75), transparent);
+}
+
+.forest-identity-role {
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1.2vw, 14px);
+  letter-spacing: 0.44em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 223, 0.88);
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.55);
+}
+
+/* ── Forest continuity: treeline edge + world backgrounds ────── */
+
+.forest-edge {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  aspect-ratio: 1040 / 140;
+  min-height: 76px;
+  max-height: 220px;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0b110d 0%, #0a100c 100%);
+}
+
+.forest-edge--closing {
+  background: linear-gradient(180deg, var(--bg-void) 0%, #0b110d 55%, #060907 100%);
+}
+
+/* closing band blends down from the content instead of up from the forest */
+.forest-edge--closing::before {
+  display: none;
+}
+
+.forest-edge--closing .forest-edge-mist {
+  inset: 0 0 auto 0;
+  height: 50%;
+  background: linear-gradient(to bottom, var(--bg-void) 10%, rgba(9, 9, 11, 0));
+}
+
+.forest-edge svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* soften the seam with the 3D forest above */
+.forest-edge::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(5, 8, 6, 0.7), transparent);
+  z-index: 1;
+}
+
+/* ground mist: blends the band into the hero backdrop below */
+.forest-edge-mist {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 62%;
+  background: linear-gradient(to top, #0a100c 8%, rgba(10, 16, 12, 0));
+  z-index: 1;
+}
+
+/* ── Projects discovered in the world ───────────────────────── */
+
+.in-world .section-label {
+  color: #6fd3c8;
+}
+
+.in-world .section-label::before {
+  color: rgba(111, 211, 200, 0.55);
+}
+
+.in-world .case-study-card {
+  background: linear-gradient(165deg, rgba(23, 30, 22, 0.55), rgba(11, 15, 12, 0.9));
+  border-color: rgba(216, 207, 183, 0.13);
+  border-radius: 6px;
+}
+
+.in-world .case-study-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(111, 211, 200, 0.38);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+}
+
+/* survey-plaque corner ticks */
+.in-world .case-study-card::before,
+.in-world .case-study-card::after {
+  content: '';
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-color: rgba(111, 211, 200, 0.35);
+  transition: border-color var(--transition-fast);
+}
+
+.in-world .case-study-card::before {
+  top: 10px;
+  left: 10px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+
+.in-world .case-study-card::after {
+  bottom: 10px;
+  right: 10px;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+.in-world .case-study-card:hover::before,
+.in-world .case-study-card:hover::after {
+  border-color: rgba(111, 211, 200, 0.75);
+}
+
+.in-world .case-study-impact-tag {
+  color: #8fe3d8;
+  background: rgba(111, 211, 200, 0.06);
+  border-color: rgba(111, 211, 200, 0.16);
+}
+
+.in-world .case-study-tag {
+  border-color: rgba(216, 207, 183, 0.16);
+  color: rgba(233, 227, 210, 0.72);
+}
+
+/* ── Research plate ─────────────────────────────────────────── */
+
+.research-plate {
+  position: relative;
+  border: 1px solid rgba(216, 207, 183, 0.13);
+  border-radius: 6px;
+  background: linear-gradient(170deg, rgba(20, 27, 20, 0.5), rgba(11, 15, 12, 0.88));
+  padding: 52px 40px 38px;
+  overflow: hidden;
+}
+
+.research-roots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.research-plate-head {
+  position: relative;
+  z-index: 1;
+}
+
+.research-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.research-tags span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #8fe3d8;
+  background: rgba(111, 211, 200, 0.05);
+  border: 1px solid rgba(111, 211, 200, 0.22);
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.research-paper-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  line-height: 1.28;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+  max-width: 920px;
+}
+
+.research-facts {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  margin-top: 32px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(216, 207, 183, 0.12);
+}
+
+.research-facts dt {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #6fd3c8;
+  margin-bottom: 9px;
+}
+
+.research-facts dd {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.research-bars {
+  position: relative;
+  z-index: 1;
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(216, 207, 183, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.research-bars-caption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.research-bar-row {
+  display: grid;
+  grid-template-columns: 190px 1fr 54px;
+  align-items: center;
+  gap: 16px;
+}
+
+.research-bar-label {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+.research-bar-track {
+  display: block;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.research-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #2f8f88, #6fd3c8);
+}
+
+.research-bar-fill.is-muted {
+  background: rgba(216, 207, 183, 0.3);
+}
+
+.research-bar-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .research-facts {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .research-plate {
+    padding: 44px 24px 30px;
+  }
+
+  .research-bar-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .research-bar-value {
+    text-align: left;
+  }
+}
+
+/* ── ChessMind spotlight ────────────────────────────────────── */
+
+.chess-plate {
+  position: relative;
+  border: 1px solid rgba(216, 207, 183, 0.13);
+  border-radius: 6px;
+  background: linear-gradient(170deg, rgba(20, 27, 20, 0.5), rgba(11, 15, 12, 0.88));
+  overflow: hidden;
+}
+
+.chess-band {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1040 / 220;
+  border-bottom: 1px solid rgba(216, 207, 183, 0.12);
+  background: linear-gradient(90deg, rgba(16, 23, 17, 0.6), rgba(9, 13, 11, 0.3));
+}
+
+.chess-body {
+  padding: 34px 40px 36px;
+}
+
+.chess-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(216, 207, 183, 0.12);
+}
+
+.chess-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.chess-stat-value {
+  font-family: var(--font-mono);
+  font-size: clamp(1.3rem, 1.6vw, 1.7rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.chess-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.chess-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 32px;
+}
+
+.chess-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #8fe3d8;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(111, 211, 200, 0.3);
+  padding-bottom: 3px;
+  transition: var(--transition-fast);
+}
+
+.chess-link:hover {
+  color: var(--text-primary);
+  border-color: rgba(111, 211, 200, 0.8);
+}
+
+.chess-link-muted {
+  color: var(--text-secondary);
+  border-color: rgba(216, 207, 183, 0.25);
+}
+
+/* anchor target for the architecture link clears the sticky nav */
+#card-chessmind {
+  scroll-margin-top: 96px;
+}
+
+/* ── ASTRA ──────────────────────────────────────────────────── */
+
+.astra-plate {
+  position: relative;
+  border: 1px solid rgba(216, 207, 183, 0.13);
+  border-radius: 6px;
+  background: linear-gradient(170deg, rgba(20, 27, 20, 0.5), rgba(11, 15, 12, 0.88));
+  overflow: hidden;
+}
+
+.astra-structure {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1040 / 170;
+  border-bottom: 1px solid rgba(216, 207, 183, 0.12);
+  background: linear-gradient(90deg, rgba(16, 23, 17, 0.6), rgba(9, 13, 11, 0.3));
+}
+
+.astra-body {
+  padding: 32px 40px 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+.astra-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.astra-role {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 12px 18px;
+  border: 1px solid rgba(216, 207, 183, 0.14);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.astra-role-title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.astra-role-when {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #8fe3d8;
+}
+
+.astra-body .leadership-repo-link {
+  align-self: flex-start;
+}
+
+@media (max-width: 900px) {
+  .chess-body,
+  .astra-body {
+    padding: 26px 22px 28px;
+  }
+
+  .chess-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ── About: the person behind the systems ───────────────────── */
+
+.about-quote {
+  font-family: 'Fraunces', Georgia, serif;
+  font-optical-sizing: auto;
+  font-size: clamp(1.3rem, 1.9vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-primary);
+  max-width: 760px;
+  margin: 8px 0 36px;
+  padding-left: 22px;
+  border-left: 2px solid #6fd3c8;
+}
+
+.about-facets {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 1px;
+  background: rgba(216, 207, 183, 0.12);
+  border: 1px solid rgba(216, 207, 183, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 0 44px;
+}
+
+.about-facet {
+  background: rgba(13, 18, 14, 0.92);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.about-facet-role {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #6fd3c8;
+}
+
+.about-facet-fact {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* ── Navigation & accessibility (Phase 15) ──────────────────── */
+
+/* keyboard-first escape hatch, hidden until focused */
+.skip-link {
+  position: fixed;
+  top: -70px;
+  left: 16px;
+  z-index: 1000;
+  padding: 11px 18px;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  border: 1px solid var(--accent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: top 160ms ease;
+}
+
+.skip-link:focus-visible {
+  top: 12px;
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+/* escape the pinned forest journey without scrolling through it */
+.forest-skip {
+  position: absolute;
+  left: 24px;
+  bottom: 26px;
+  z-index: 3;
+  padding: 9px 16px;
+  background: rgba(9, 12, 9, 0.55);
+  border: 1px solid rgba(240, 234, 216, 0.28);
+  border-radius: 8px;
+  color: rgba(240, 234, 216, 0.8);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.forest-skip:hover,
+.forest-skip:focus-visible {
+  border-color: rgba(255, 235, 190, 0.75);
+  color: #f5efdd;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+}
+
+/* ── Open Source contributions ──────────────────────────────── */
+
+.os-plate {
+  position: relative;
+  border: 1px solid rgba(216, 207, 183, 0.13);
+  border-radius: 6px;
+  background: linear-gradient(170deg, rgba(20, 27, 20, 0.5), rgba(11, 15, 12, 0.88));
+  overflow: hidden;
+}
+
+.os-band {
+  display: block;
+  width: 100%;
+  aspect-ratio: 786 / 136;
+  border-bottom: 1px solid rgba(216, 207, 183, 0.12);
+  background: linear-gradient(90deg, rgba(16, 23, 17, 0.6), rgba(9, 13, 11, 0.3));
+}
+
+.os-body {
+  padding: 34px 40px 36px;
+}
+
+.os-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid rgba(216, 207, 183, 0.12);
+}
+
+.os-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.os-stat-value {
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 1.9vw, 2rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.os-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.os-rows {
+  list-style: none;
+  margin: 26px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.os-row-link {
+  display: grid;
+  grid-template-columns: 140px 64px 1fr auto;
+  gap: 18px;
+  align-items: baseline;
+  padding: 14px 4px;
+  border-bottom: 1px solid rgba(216, 207, 183, 0.1);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+.os-row-link:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.os-row-repo {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.os-row-pr {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #8fe3d8;
+}
+
+.os-row-title {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.os-row-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6fd3c8;
+  border: 1px solid rgba(111, 211, 200, 0.35);
+  border-radius: 4px;
+  padding: 3px 9px;
+  justify-self: end;
+}
+
+.os-more {
+  margin-top: 22px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.os-profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #8fe3d8;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(111, 211, 200, 0.3);
+  padding-bottom: 3px;
+  transition: var(--transition-fast);
+}
+
+.os-profile-link:hover {
+  color: var(--text-primary);
+  border-color: rgba(111, 211, 200, 0.8);
+}
+
+@media (max-width: 900px) {
+  .os-body {
+    padding: 26px 22px 28px;
+  }
+
+  .os-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .os-row-link {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'repo status' 'pr pr' 'title title';
+    gap: 6px 14px;
+  }
+
+  .os-row-repo { grid-area: repo; }
+  .os-row-status { grid-area: status; }
+  .os-row-pr { grid-area: pr; }
+  .os-row-title { grid-area: title; }
+}
+
+/* ── Resume page (/resume) ──────────────────────────────────── */
+
+.resume-page {
+  min-height: 100vh;
+  background: #eceef1;
+  color: #16181d;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  padding: 40px 16px 64px;
+}
+
+.resume-sheet {
+  max-width: 860px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 44px 52px 52px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12), 0 8px 30px rgba(15, 23, 42, 0.08);
+}
+
+.resume-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.resume-print-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid #cbd2da;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease;
+}
+
+.resume-print-btn:hover {
+  border-color: #1d4ed8;
+  color: #1d4ed8;
+}
+
+.resume-header {
+  border-bottom: 2px solid #16181d;
+  padding-bottom: 14px;
+}
+
+.resume-name {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.resume-headline {
+  margin: 4px 0 8px;
+  font-size: 14.5px;
+  color: #334155;
+}
+
+.resume-contact {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.resume-contact a {
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+.resume-contact a:hover {
+  text-decoration: underline;
+}
+
+.resume-sep {
+  margin: 0 8px;
+  color: #94a3b8;
+}
+
+.resume-section {
+  margin-top: 20px;
+}
+
+.resume-section > h2 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #1d4ed8;
+  border-bottom: 1px solid #d8dee7;
+  padding-bottom: 5px;
+  margin: 0 0 10px;
+}
+
+.resume-entry + .resume-entry {
+  margin-top: 13px;
+}
+
+.resume-entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.resume-entry-title {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: #16181d;
+}
+
+.resume-entry-when {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: #64748b;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+a.resume-entry-when {
+  color: #1d4ed8;
+}
+
+a.resume-entry-when:hover {
+  text-decoration: underline;
+}
+
+.resume-entry-sub {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  color: #334155;
+}
+
+.resume-bullets {
+  margin: 7px 0 0;
+  padding-left: 18px;
+}
+
+.resume-bullets li {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #1f2937;
+  margin-top: 4px;
+}
+
+.resume-skills li {
+  margin-top: 3px;
+}
+
+@media (max-width: 700px) {
+  .resume-sheet {
+    padding: 28px 22px 36px;
+  }
+
+  .resume-entry-head {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 13mm 14mm;
+}
+
+@media print {
+  html, body {
+    background: #ffffff !important;
+  }
+
+  .resume-page {
+    background: #ffffff !important;
+    padding: 0 !important;
+    min-height: 0;
+  }
+
+  .resume-sheet {
+    box-shadow: none !important;
+    border-radius: 0;
+    max-width: none;
+    padding: 0 !important;
+  }
+
+  .resume-actions {
+    display: none !important;
+  }
+
+  .resume-entry {
+    break-inside: avoid;
+  }
+
+  .resume-contact a,
+  a.resume-entry-when {
+    color: #16181d !important;
+  }
+
+  .resume-section > h2 {
+    color: #14408f !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

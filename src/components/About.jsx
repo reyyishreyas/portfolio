@@ -23,6 +23,14 @@ export default function About() {
     }
   ];
 
+  const facets = [
+    { role: 'Student', fact: 'B.E. AIML 2028 · BMSIT&M · CGPA 9.15/10' },
+    { role: 'Builder', fact: 'Production ML systems, autonomous simulations, explainable AI' },
+    { role: 'Researcher', fact: 'First-author paper accepted at SICE 2026' },
+    { role: 'Leader', fact: 'ASTRA President · 30-member team' },
+    { role: 'Open source', fact: 'Merged pull requests in nilearn, PCNtoolkit and movement' }
+  ];
+
   return (
     <section id="about" aria-labelledby="title-about">
       <div className="section-header">
@@ -37,6 +45,19 @@ export default function About() {
         <p className="about-description">
           Artificial Intelligence and Machine Learning undergraduate with hands-on experience in building production ML systems, autonomous simulations, and explainable AI platforms. I specialize in deep learning architectures, ensemble methods, and deploying intelligent applications that solve real problems.
         </p>
+
+        <blockquote className="about-quote">
+          Technology is something I build, not my entire identity.
+        </blockquote>
+
+        <ul className="about-facets">
+          {facets.map((f) => (
+            <li key={f.role} className="about-facet">
+              <span className="about-facet-role">{f.role}</span>
+              <span className="about-facet-fact">{f.fact}</span>
+            </li>
+          ))}
+        </ul>
 
         <StaggerGrid className="about-highlights">
           {pillars.map((pillar) => (

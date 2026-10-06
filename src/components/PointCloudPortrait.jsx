@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo, useRef } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import {
   BufferGeometry,
@@ -188,12 +188,25 @@ function PortraitPoints({ onReady }) {
  * @returns {JSX.Element}
  */
 export default function PointCloudPortrait({ onReady }) {
+  const holderRef = useRef(null);
+  const [inView, setInView] = useState(true);
+
+  // stop rendering the cloud while the hero is scrolled out of view
+  useEffect(() => {
+    const el = holderRef.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="hero-cloud" aria-hidden="true">
+    <div className="hero-cloud" ref={holderRef} aria-hidden="true">
       <Canvas
         dpr={[1, 1.75]}
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
         camera={{ position: [0, 0, 4.4], fov: 35 }}
+        frameloop={inView ? 'always' : 'never'}
       >
         <Suspense fallback={null}>
           <PortraitPoints onReady={onReady} />

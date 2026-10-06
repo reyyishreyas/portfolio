@@ -215,7 +215,7 @@ export default function Header() {
 
         <div className="hero-metrics">
           <div className="hero-metric">
-            <span className="hero-metric-value" data-count-to="9.08" data-count-decimals="2">9.08</span>
+            <span className="hero-metric-value" data-count-to="9.15" data-count-decimals="2">9.15</span>
             <span className="hero-metric-label">CGPA</span>
           </div>
           <div className="hero-metric">
@@ -224,7 +224,7 @@ export default function Header() {
           </div>
           <div className="hero-metric">
             <span className="hero-metric-value">ASTRA</span>
-            <span className="hero-metric-label">Tech Head</span>
+            <span className="hero-metric-label">President</span>
           </div>
           <div className="hero-metric">
             <span className="hero-metric-value" data-count-to="4" data-count-suffix="+">4+</span>

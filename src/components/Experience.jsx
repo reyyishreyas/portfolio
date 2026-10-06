@@ -2,10 +2,9 @@ import { Briefcase } from 'lucide-react';
 
 export default function Experience() {
   const internDuties = [
-    'Applied end-to-end ML workflows including preprocessing, feature engineering, model selection, training, and evaluation.',
-    'Worked with Python ML libraries and supervised learning algorithms to build production-ready models.',
-    'Developed SalaryPredict AI as a complete ML system from data ingestion to Flask deployment.',
-    'Compared multiple regression models, tuned hyperparameters, and measured performance using standard ML metrics.'
+    'Delivered SalaryPredict AI end-to-end on the program’s ~19.5k-row salary dataset: benchmarked five regression approaches and shipped a stacking ensemble that cut MAE from ₹41,512 (linear regression) to ₹5,791.',
+    'Built the Flask app with bulk prediction, dashboards and a fairness audit by location, department and education.',
+    '1st Place — Launched Global ML Expo (SalaryPredict AI).'
   ];
 
   return (

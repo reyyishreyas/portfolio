@@ -1,11 +1,11 @@
 import { lazy, Suspense, useMemo, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { marked } from 'marked';
-import { X, ArrowRight } from 'lucide-react';
+import { X, ArrowRight, ExternalLink } from 'lucide-react';
 
 const TrajectoryRibbon = lazy(() => import('./TrajectoryRibbon'));
 
-export default function ProjectCard({ filepath, name, summary, impact, tags, sysId, githubUrl, problemStatement, built, techniques, showTrajectory }) {
+export default function ProjectCard({ filepath, name, summary, impact, tags, sysId, githubUrl, liveUrl, problemStatement, built, techniques, showTrajectory }) {
   const [htmlContent, setHtmlContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -119,6 +119,19 @@ export default function ProjectCard({ filepath, name, summary, impact, tags, sys
             View Architecture <span><ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle' }} /></span>
           </button>
 
+          {liveUrl && (
+            <a
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="case-study-github-btn"
+              title="Open live demo"
+            >
+              <ExternalLink size={13} style={{ display: 'inline-block', verticalAlign: 'middle' }} />
+              Live
+            </a>
+          )}
+
           {githubUrl && (
             <a
               href={githubUrl}
@@ -146,7 +159,7 @@ export default function ProjectCard({ filepath, name, summary, impact, tags, sys
         </div>
       </div>
     </article>
-  ), [sysId, impact, name, problemStatement, summary, built, techniques, tags, githubUrl, showTrajectory]);
+  ), [sysId, impact, name, problemStatement, summary, built, techniques, tags, githubUrl, liveUrl, showTrajectory]);
 
   return (
     <>

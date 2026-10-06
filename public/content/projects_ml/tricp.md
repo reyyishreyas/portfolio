@@ -1,15 +1,16 @@
-# TRICP - Telecom Retention Intelligence & Churn Predictor
-## Full-Stack Churn Analytics & Automated Retention System
+# TRICP — Telecom Retention Intelligence & Churn Predictor
+## Full-stack churn analytics with automated retention and intervention simulation
 
-An end-to-end customer churn analysis and proactive retention platform utilizing ensemble machine learning, explainable AI, and automated email campaigns.
+An end-to-end customer retention platform: churn prediction over a stacking ensemble, retention-email automation and what-if intervention simulation, deployed live on Vercel.
 
 ### Core Metrics & Telemetry
-- **Model Type**: Ensemble Classifiers (XGBoost, Random Forest, Logistic Regression)
-- **Key Capabilities**: Customer churn probability scoring, What-If simulation, SHAP-based feature importance
-- **Automation**: Event-driven SMTP integration for high-risk alerts
+- **Dataset**: 7,043 customers
+- **Model**: Stacking ensemble — ROC AUC 0.827
+- **Backend**: FastAPI with interactive OpenAPI docs
+- **Frontend**: React/Vite, deployed on Vercel
 
 ### Technical Highlights
-- **Ensemble Model Architecture**: Leverages multiple classification algorithms combined into an ensemble pipeline to maximize recall on churn risk.
-- **Explainable AI Integration**: Incorporates SHAP values to explain individual predictions, helping business stakeholders understand *why* a customer is likely to churn.
-- **Interactive What-If Simulation**: Dynamic user dashboard allowing managers to adjust parameters (e.g. contract type, monthly charges) and preview the change in churn risk.
-- **Automated Retention Pipeline**: Triggers custom, personalized retention emails to high-risk customers based on their primary churn risk factors (e.g. offering discounts on fiber optic connections).
+- **Churn scoring**: a stacking ensemble estimates churn probability for every customer.
+- **Retention automation**: personalized retention emails triggered for high-risk customers based on their primary risk factors.
+- **Intervention simulation**: managers preview how contract, billing and service changes shift churn risk before acting.
+- **Built with AI pair-programming**: developed end-to-end with Claude Code, from the FastAPI backend to the React frontend.

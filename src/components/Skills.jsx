@@ -3,16 +3,20 @@ import { StaggerGrid, RevealItem } from './Reveal';
 export default function Skills() {
   const skillGroups = [
     {
-      category: 'Machine Learning',
-      skills: ['Python', 'PyTorch', 'TensorFlow', 'Scikit-learn', 'XGBoost', 'Pandas', 'NumPy']
+      category: 'Agentic & LLM',
+      skills: ['LangChain', 'LangGraph', 'RAG', 'FAISS', 'BM25', 'RAGAS', 'Gemini API', 'Ollama', 'MCP']
     },
     {
-      category: 'Engineering',
-      skills: ['Flask', 'MySQL', 'Git', 'GitHub']
+      category: 'ML & Deep Learning',
+      skills: ['PyTorch', 'Scikit-learn', 'XGBoost', 'LightGBM', 'Ensemble Methods', 'Computer Vision']
     },
     {
-      category: 'Concepts',
-      skills: ['Deep Learning', 'NLP', 'Feature Engineering', 'Model Deployment', 'Explainable AI']
+      category: 'Backend & Data',
+      skills: ['Python', 'FastAPI', 'Flask', 'Docker', 'SQL', 'Pandas', 'NumPy', 'Git/GitHub', 'CI/CD']
+    },
+    {
+      category: 'Tooling',
+      skills: ['Claude Code', 'Streamlit', 'Vercel', 'pytest']
     }
   ];
 

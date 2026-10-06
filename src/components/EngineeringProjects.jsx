@@ -17,7 +17,7 @@ export default function EngineeringProjects() {
   ];
 
   return (
-    <section aria-labelledby="title-engineering-projects">
+    <section className="in-world" aria-labelledby="title-engineering-projects">
       <div className="projects-container">
         <div className="projects-group-header">
           <h3 id="title-engineering-projects" className="projects-group-title">Engineering Projects</h3>

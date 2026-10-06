@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
 
 const NAV_LINKS = [
+  { id: 'projects', label: 'Work' },
+  { id: 'research', label: 'Research' },
+  { id: 'astra', label: 'ASTRA' },
   { id: 'about', label: 'About' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'leadership', label: 'Leadership' },
-  { id: 'achievements', label: 'Achievements' },
-  { id: 'skills', label: 'Skills' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -61,7 +59,7 @@ export default function SiteHeader() {
   }, []);
 
   return (
-    <nav className="nav-header">
+    <nav className="nav-header" aria-label="Primary">
       <motion.div
         className="nav-progress"
         style={{ scaleX: progressScaleX }}
