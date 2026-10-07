@@ -16,7 +16,7 @@ export function initSmoothScroll() {
   if (lenis) return lenis;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
 
-  lenis = new Lenis({ lerp: 0.11, anchors: true });
+  lenis = new Lenis({ lerp: 0.11, anchors: true, allowNestedScroll: true });
 
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));

@@ -19,12 +19,12 @@ const streamVertex = /* glsl */ `
   uniform float uOpacity;
   varying float vA;
   void main() {
-    // travel the same path as the visitor, in lanes, in perfect order:
-    // nature's dust resolving into a system
+    // travel in ordered lanes through the transformation and research
+    // zones: nature's dust resolving into a system
     float t = fract(aPhase + uTime * aSpeed);
     float e = t * t * (3.0 - 2.0 * t);
-    float z = mix(16.0, -46.0, e);
-    float x = sin(t * 3.14159 * 1.8) * (1.0 - t) * (1.0 - t) * 1.6 + aLane;
+    float z = mix(-148.0, -244.0, e);
+    float x = sin(t * 3.14159 * 1.8) * (1.0 - t) * (1.0 - t) * 0.9 + aLane;
     float y = 0.3 + abs(fract(aLane * 7.31) - 0.5) * 1.1;
     vec4 mv = modelViewMatrix * vec4(x, y, z, 1.0);
     gl_PointSize = (22.0 / -mv.z) * (1.4 + fract(aPhase * 13.0));
@@ -69,7 +69,7 @@ export default function DataStream({ count }) {
     geo.setAttribute('aLane', new THREE.BufferAttribute(lanes, 1));
     geo.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
     geo.setAttribute('aSpeed', new THREE.BufferAttribute(speeds, 1));
-    geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 1, -15), 60);
+    geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 1, -196), 70);
 
     const mat = new THREE.ShaderMaterial({
       uniforms,
@@ -85,7 +85,9 @@ export default function DataStream({ count }) {
   useFrame((state) => {
     const p = journeyState.progress;
     uniforms.uTime.value = state.clock.elapsedTime;
-    uniforms.uOpacity.value = smoothstep(0.48, 0.72, p);
+    // intelligence visible from the storm on, gone when nature returns
+    uniforms.uOpacity.value =
+      smoothstep(0.3, 0.5, p) * (1 - smoothstep(0.82, 0.88, p));
   });
 
   return <points geometry={geometry} material={material} frustumCulled={false} />;

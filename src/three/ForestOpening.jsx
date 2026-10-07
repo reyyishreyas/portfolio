@@ -7,6 +7,7 @@ import { journeyState } from './journey';
 import CameraController from './CameraController';
 import ForestAudioGate from './ForestAudioGate';
 import IdentityReveal from './IdentityReveal';
+import WaterVeil from './WaterVeil';
 import { getLenis } from '../lib/smoothScroll';
 
 const ForestScene = lazy(() => import('./ForestScene'));
@@ -112,14 +113,15 @@ export default function ForestOpening() {
           </Suspense>
         </Canvas>
         <div className="forest-vignette" aria-hidden="true" />
+        <WaterVeil />
         <ForestAudioGate />
         <IdentityReveal />
         <button
           type="button"
           className="forest-skip"
           onClick={() => {
-            const hero = document.querySelector('.hero-section');
-            const y = hero ? hero.getBoundingClientRect().top + window.scrollY : 0;
+            const end = document.getElementById('journey-end');
+            const y = end ? end.getBoundingClientRect().top + window.scrollY : document.body.scrollHeight;
             const lenis = getLenis();
             if (lenis) {
               lenis.scrollTo(y);
@@ -128,9 +130,11 @@ export default function ForestOpening() {
             }
           }}
         >
-          Skip intro →
+          Skip to the end →
         </button>
       </div>
+      {/* lands the visitor at progress 1.0 with the stage still pinned */}
+      <span id="journey-end" className="forest-journey-end" aria-hidden="true" />
     </section>
   );
 }

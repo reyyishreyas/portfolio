@@ -80,7 +80,10 @@ export default function PathVeins() {
   useFrame((state) => {
     const p = journeyState.progress;
     uniforms.uTime.value = state.clock.elapsedTime;
-    uniforms.uOpacity.value = smoothstep(0.35, 0.6, p);
+    // roots carrying signal: awake through the worlds of thought,
+    // sleeping again when the forest simply becomes a forest
+    uniforms.uOpacity.value =
+      smoothstep(0.3, 0.55, p) * (1 - smoothstep(0.82, 0.88, p));
   });
 
   return (

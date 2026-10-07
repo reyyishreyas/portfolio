@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { EffectComposer, GodRays, Bloom } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
+import { sunDiscMaterial } from './materials';
 
 // sun sits ahead-left of the path at low elevation so canopy gaps
 // slice the light into shafts; must match the directional light vector
@@ -18,10 +19,9 @@ export default function ForestEffects() {
 
   return (
     <group>
-      <mesh ref={sunRef} position={SUN_POSITION}>
+      <mesh ref={sunRef} position={SUN_POSITION} material={sunDiscMaterial}>
         {/* fog off: at 140 units the exponential fog would erase it */}
         <sphereGeometry args={[6, 24, 24]} />
-        <meshBasicMaterial color="#fff2d2" fog={false} toneMapped={false} />
       </mesh>
 
       <EffectComposer autoClear={false} multisampling={4}>

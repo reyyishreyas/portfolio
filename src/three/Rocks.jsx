@@ -31,7 +31,7 @@ export default function Rocks({ quality }) {
     const n = Math.round(56 * quality.treeFactor);
     for (let i = 0; i < n; i += 1) {
       const x = (rnd() - 0.5) * 60;
-      const z = 20 - rnd() * 90;
+      const z = rnd() < 0.72 ? 20 - rnd() * 198 : -320 - rnd() * 54;
       out.push({
         x, z,
         s: 0.14 + rnd() * 0.6,

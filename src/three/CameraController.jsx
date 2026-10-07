@@ -34,8 +34,8 @@ export default function CameraController() {
     const p = journeyState.progress;
     const target = pathAt(p);
 
-    // entry push: START_Z → path start, forgotten once scrolling begins
-    const scrollFade = Math.max(0, 1 - p * 8);
+    // entry push: START_Z → path start, forgotten once the walk begins
+    const scrollFade = Math.max(0, 1 - p * 33);
     const targetZ = target.z + (START_Z - 16) * (1 - introEase) * scrollFade;
     const targetY = groundHeight(target.x, targetZ) + EYE_HEIGHT;
 
@@ -72,6 +72,10 @@ export default function CameraController() {
       yawRef.current + smoothed.current.yaw + idleYaw + introYaw,
       0
     );
+    if (import.meta.env.DEV) {
+      journeyState.cam = cam.position.z;
+      journeyState.yaw = cam.rotation.y;
+    }
   });
 
   return null;

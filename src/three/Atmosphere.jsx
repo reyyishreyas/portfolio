@@ -46,7 +46,7 @@ export default function Atmosphere({ count }) {
     for (let i = 0; i < count; i += 1) {
       positions[i * 3] = (rnd() - 0.5) * 46;
       positions[i * 3 + 1] = 0.4 + rnd() * 7.5;
-      positions[i * 3 + 2] = 20 - rnd() * 80;
+      positions[i * 3 + 2] = 24 - rnd() * 400;
       phases[i] = rnd();
     }
     const geo = new THREE.BufferGeometry();

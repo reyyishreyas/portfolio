@@ -112,7 +112,9 @@ function makeSapling(rnd) {
 }
 
 // authored cluster centres: framing trees near the path, mid-depth groups
-// and a distant wall of silhouettes the fog swallows
+// and a distant wall of silhouettes the fog swallows. The list spans the
+// whole journey: living forest through the flood, a thinning edge where
+// the world turns to computation, and the forest returning at the end.
 const CLUSTERS = [
   { x: -7.5, z: 14, r: 3.2, n: 5, s: 1.35 },
   { x: 8, z: 11, r: 3.6, n: 6, s: 1.3 },
@@ -127,6 +129,31 @@ const CLUSTERS = [
   { x: -16, z: -56, r: 7, n: 8, s: 1.1 },
   { x: 17, z: -62, r: 7, n: 8, s: 1.1 },
   { x: 0, z: -74, r: 12, n: 12, s: 1.2 },
+  // deeper forest: the walk through weather
+  { x: -8, z: -86, r: 6, n: 7, s: 1.05 },
+  { x: 9, z: -95, r: 6, n: 7, s: 1.0 },
+  { x: -12, z: -108, r: 7, n: 8, s: 1.1 },
+  { x: 13, z: -120, r: 7, n: 8, s: 1.05 },
+  { x: -9, z: -133, r: 6, n: 7, s: 1.0 },
+  { x: 10, z: -146, r: 7, n: 7, s: 1.05 },
+  { x: -13, z: -158, r: 7, n: 8, s: 1.0 },
+  { x: 0, z: -174, r: 10, n: 9, s: 1.1 },
+  // thinning edge where nature gives way to structure
+  { x: -16, z: -192, r: 8, n: 4, s: 0.95 },
+  { x: 17, z: -204, r: 8, n: 4, s: 0.9 },
+  // the forest returns: human quiet and the closing clearing
+  { x: -10, z: -318, r: 7, n: 7, s: 1.05 },
+  { x: 11, z: -332, r: 7, n: 7, s: 1.0 },
+  { x: -12, z: -346, r: 7, n: 7, s: 1.1 },
+  { x: 13, z: -358, r: 7, n: 6, s: 1.0 },
+  { x: 0, z: -378, r: 13, n: 12, s: 1.15 },
+];
+
+// silhouette walls for depth: one per living-forest span
+const WALLS = [
+  { cz: -20, rad: [34, 54], zCap: 20 },
+  { cz: -110, rad: [38, 56], zCap: -56 },
+  { cz: -350, rad: [30, 46], zCap: -314 },
 ];
 
 /**
@@ -164,7 +191,7 @@ export default function TreeCluster({ quality }) {
       for (let i = 0; i < count; i += 1) {
         const x = c.x + gauss() * c.r;
         const z = c.z + gauss() * c.r;
-        if (Math.abs(x) < 3.4 && z > -70) continue; // keep the path open
+        if (Math.abs(x) < 3.4) continue; // keep the path open everywhere
         const roll = rnd();
         const kind = roll < 0.52 ? 'conifer' : roll < 0.85 ? 'broadleaf' : 'sapling';
         placements[kind].push({
@@ -178,19 +205,22 @@ export default function TreeCluster({ quality }) {
       }
     });
 
-    // distant silhouette wall for depth
-    const wallN = Math.round(64 * quality.treeFactor);
-    for (let i = 0; i < wallN; i += 1) {
-      const a = rnd() * Math.PI * 2;
-      const rad = 34 + rnd() * 20;
-      const x = Math.cos(a) * rad;
-      const z = -20 + Math.sin(a) * rad;
-      if (z > 20) continue;
-      const kind = rnd() < 0.75 ? 'conifer' : 'broadleaf';
-      placements[kind].push({
-        x, z, s: 1.3 + rnd() * 0.8, yaw: rnd() * Math.PI * 2, tilt: 0, tint: rnd(),
-      });
-    }
+    // distant silhouette walls for depth, one per forest span
+    WALLS.forEach((w) => {
+      const wallN = Math.round(48 * quality.treeFactor);
+      for (let i = 0; i < wallN; i += 1) {
+        const a = rnd() * Math.PI * 2;
+        const rad = w.rad[0] + rnd() * (w.rad[1] - w.rad[0]);
+        const x = Math.cos(a) * rad;
+        const z = w.cz + Math.sin(a) * rad;
+        if (z > w.zCap) continue;
+        if (Math.abs(x) < 4) continue; // never across the path
+        const kind = rnd() < 0.75 ? 'conifer' : 'broadleaf';
+        placements[kind].push({
+          x, z, s: 1.3 + rnd() * 0.8, yaw: rnd() * Math.PI * 2, tilt: 0, tint: rnd(),
+        });
+      }
+    });
 
     return placements;
   }, [quality.treeFactor]);

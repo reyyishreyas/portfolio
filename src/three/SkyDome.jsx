@@ -1,5 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import { skyMaterial } from './materials';
 
 const SUN_DIR = new THREE.Vector3(-58, 34, -110).normalize();
 
@@ -7,10 +9,13 @@ const SUN_DIR = new THREE.Vector3(-58, 34, -110).normalize();
  * Static gradient sky: dark zenith, warmer horizon, extra warm boost
  * around the sun direction. Vertex colours baked on the CPU (no
  * shader) so it tone-maps like every other material in the scene.
+ * The dome rides with the camera on x/z (the journey spans the whole
+ * world) and its material colour tints the sky per environment.
  *
  * @returns {JSX.Element}
  */
 export default function SkyDome() {
+  const meshRef = useRef(null);
   const geometry = useMemo(() => {
     const geo = new THREE.SphereGeometry(350, 48, 24);
     const pos = geo.attributes.position;
@@ -38,14 +43,15 @@ export default function SkyDome() {
     return geo;
   }, []);
 
+  // the world is 400 units long: keep the dome centred on the camera
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.position.x = state.camera.position.x;
+      meshRef.current.position.z = state.camera.position.z;
+    }
+  });
+
   return (
-    <mesh geometry={geometry} renderOrder={-1}>
-      <meshBasicMaterial
-        vertexColors
-        side={THREE.BackSide}
-        fog={false}
-        depthWrite={false}
-      />
-    </mesh>
+    <mesh ref={meshRef} geometry={geometry} material={skyMaterial} renderOrder={-1} />
   );
 }

@@ -1,17 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { ambience } from '../audio/ambience';
+import { journeyState } from './journey';
 
 /**
  * Audio entry UI for the forest: a gate that satisfies autoplay policy
  * (starting sound needs a gesture) plus a persistent mute toggle.
- * The site stays fully usable if the visitor ignores the gate.
+ * The gate steps aside once the visitor walks past the intro, whether
+ * or not they ever clicked it — audio can start from the toggle later.
  *
  * @returns {JSX.Element}
  */
 export default function ForestAudioGate() {
   const [entered, setEntered] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    let raf = 0;
+    const tick = () => {
+      const begun = journeyState.progress > 0.012;
+      setStarted((prev) => (prev === begun ? prev : begun));
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   const handleEnter = async () => {
     const running = await ambience.start();
@@ -48,10 +62,10 @@ export default function ForestAudioGate() {
 
       <button
         type="button"
-        className={`forest-enter ${entered ? 'is-hidden' : ''}`}
+        className={`forest-enter ${entered || started ? 'is-hidden' : ''}`}
         onClick={handleEnter}
-        aria-hidden={entered}
-        tabIndex={entered ? -1 : 0}
+        aria-hidden={entered || started}
+        tabIndex={entered || started ? -1 : 0}
       >
         <span className="forest-enter-label">Enter the forest</span>
         <span className="forest-enter-hint">sound on · headphones recommended</span>

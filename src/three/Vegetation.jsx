@@ -74,7 +74,8 @@ export default function Vegetation({ quality }) {
     while (out.length < quality.grass && guard < quality.grass * 6) {
       guard += 1;
       const x = (rnd() - 0.5) * 70;
-      const z = 22 - rnd() * 95;
+      // living forest span, or where nature returns at the end
+      const z = rnd() < 0.72 ? 22 - rnd() * 200 : -316 - rnd() * 60;
       // denser at path edges, absent from the worn centre line
       const edge = smoothstep(0.6, 2.6, Math.abs(x + Math.sin(z * 0.11) * 1.4));
       if (rnd() > 0.25 + edge * 0.75) continue;
@@ -95,7 +96,7 @@ export default function Vegetation({ quality }) {
     const out = [];
     for (let i = 0; i < quality.ferns; i += 1) {
       const x = (rnd() - 0.5) * 56;
-      const z = 18 - rnd() * 85;
+      const z = rnd() < 0.72 ? 18 - rnd() * 196 : -318 - rnd() * 56;
       if (Math.abs(x) < 2.6) continue;
       out.push({ x, z, s: 0.55 + rnd() * 0.7, yaw: rnd() * Math.PI * 2, tint: rnd() });
     }

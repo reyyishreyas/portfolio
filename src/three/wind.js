@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 
 /** One shared clock every wind material reads from. */
-export const windUniforms = { uTime: { value: 0 } };
+export const windUniforms = { uTime: { value: 0 }, uWind: { value: 1 } };
 
 /**
  * Attach a height-weighted wind sway to a standard material before it
  * compiles. Sway phase comes from each instance's world origin, so the
  * field rustles per-blade instead of pulsing in sync. Amplitude is
- * squared with height: roots stay planted, tips travel.
+ * squared with height: roots stay planted, tips travel. uWind scales
+ * the whole field so the storm can breathe harder.
  *
  * @param {THREE.MeshStandardMaterial} material
  * @param {{amp: number, height: number, speed: number}} cfg amp: max tip offset (world units); height: local y that counts as full height
@@ -16,7 +17,8 @@ export const windUniforms = { uTime: { value: 0 } };
 export function applyWind(material, { amp, height, speed }) {
   material.onBeforeCompile = (shader) => {
     shader.uniforms.uTime = windUniforms;
-    shader.vertexShader = `uniform float uTime;\n${shader.vertexShader}`.replace(
+    shader.uniforms.uWind = windUniforms;
+    shader.vertexShader = `uniform float uTime;\nuniform float uWind;\n${shader.vertexShader}`.replace(
       '#include <begin_vertex>',
       `#include <begin_vertex>
       {
@@ -28,8 +30,8 @@ export function applyWind(material, { amp, height, speed }) {
         #endif
         float h = clamp(position.y / ${height.toFixed(3)}, 0.0, 1.0);
         float phase = iOrigin.x * 0.45 + iOrigin.z * 0.3;
-        float gust = sin(uTime * ${speed.toFixed(3)} + phase)
-                   + 0.45 * sin(uTime * ${(speed * 1.7).toFixed(3)} - phase * 1.3);
+        float gust = (sin(uTime * ${speed.toFixed(3)} + phase)
+                   + 0.45 * sin(uTime * ${(speed * 1.7).toFixed(3)} - phase * 1.3)) * uWind;
         float k = h * h * ${amp.toFixed(4)};
         transformed.x += gust * k;
         transformed.z += gust * k * 0.55;
