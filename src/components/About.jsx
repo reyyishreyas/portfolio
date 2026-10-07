@@ -26,7 +26,7 @@ export default function About() {
   const facets = [
     { role: 'Student', fact: 'B.E. AIML 2028 · BMSIT&M · CGPA 9.15/10' },
     { role: 'Builder', fact: 'Production ML systems, autonomous simulations, explainable AI' },
-    { role: 'Researcher', fact: 'First-author paper accepted at SICE 2026' },
+    { role: 'Researcher', fact: 'First-author abstract accepted at SICE 2026' },
     { role: 'Leader', fact: 'ASTRA President · 30-member team' },
     { role: 'Open source', fact: 'Merged pull requests in nilearn, PCNtoolkit and movement' }
   ];

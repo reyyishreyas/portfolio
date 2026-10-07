@@ -13,6 +13,16 @@ const scratch = {
   e: new THREE.Euler(),
 };
 
+// discoveries that stand beside the path: slabs are pushed clear of them
+const BLOCKED = [
+  { z: -217.9, side: 1 }, // chess set + ensemble tower
+  { z: -221.8, side: 1 }, // the tower stands behind the board
+  { z: -227.2, side: -1 }, // trajectory prediction
+  { z: -234.5, side: 1 }, // paper analyst
+  { z: -241.9, side: -1 }, // retention model
+  { z: -249.4, side: 1 }, // salary leaderboard
+];
+
 /**
  * The first structures of the computation world: angular slabs that
  * rise out of the floor as the visitor approaches, strung together by
@@ -36,9 +46,12 @@ export default function StructureField() {
       const z = -178 - rnd() * 67;
       const side = rnd() < 0.5 ? -1 : 1;
       let x = side * (4.5 + rnd() * 22);
-      // keep clear of the chessboard clearing (ChessMachine sits there)
-      if (z < -208 && z > -216 && x > 1.5 && x < 8.5) x = -x;
       const h = 2 + rnd() * 7;
+      // give every trail-side discovery its own clearing
+      const blocked = BLOCKED.find(
+        (b) => Math.abs(z - b.z) < 6 && Math.sign(x) === b.side && Math.abs(x) < 12,
+      );
+      if (blocked) x = blocked.side * (13 + rnd() * 13);
       slabs.push({
         x,
         z,

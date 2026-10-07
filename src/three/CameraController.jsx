@@ -4,7 +4,7 @@ import { journeyState, pathAt } from './journey';
 import { groundHeight } from './utils';
 
 const START_Z = 17.9;
-const INTRO_SECONDS = 9;
+const INTRO_SECONDS = 5;
 const EYE_HEIGHT = 1.7;
 
 /**
@@ -52,10 +52,11 @@ export default function CameraController() {
     const ky = 1 - Math.exp(-delta * 4);
     yawRef.current += (pathYaw - yawRef.current) * ky;
 
-    // cursor parallax, eased so it never snaps
-    const kp = 1 - Math.exp(-delta * 2.4);
-    smoothed.current.yaw += (-state.pointer.x * 0.05 - smoothed.current.yaw) * kp;
-    smoothed.current.pitch += (state.pointer.y * 0.03 - smoothed.current.pitch) * kp;
+    // cursor parallax, eased so it never snaps — strong enough that the
+    // world visibly swings with the pointer, like looking around in a game
+    const kp = 1 - Math.exp(-delta * 3.2);
+    smoothed.current.yaw += (-state.pointer.x * 0.1 - smoothed.current.yaw) * kp;
+    smoothed.current.pitch += (state.pointer.y * 0.06 - smoothed.current.pitch) * kp;
 
     const swayX = Math.sin(t * 0.31) * 0.06;
     const bobY = Math.sin(t * 0.9) * 0.025 + Math.sin(t * 0.23) * 0.02;

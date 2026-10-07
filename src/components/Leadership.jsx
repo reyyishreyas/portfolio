@@ -55,7 +55,7 @@ export default function Leadership() {
   const structure = useMemo(() => buildStructure(), []);
 
   const leadershipDuties = [
-    'Led a 30-member team through 6 research manuscript submissions — 3 accepted at SICE 2026, including my first-author paper.',
+    'Led a 30-member team through 6 research manuscript submissions — 3 abstracts accepted at SICE 2026, including my first-author abstract.',
     'Leading technical initiatives and architecture decisions for the ASTRA defence technology club.',
     'Driving project ideation, technical planning, and implementation across autonomous systems and defence tech.',
     'Conducting technical sessions on Git/GitHub workflows, development practices, and ML tooling.',

@@ -43,12 +43,20 @@ export default function SkyDome() {
     return geo;
   }, []);
 
-  // the world is 400 units long: keep the dome centred on the camera
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.position.x = state.camera.position.x;
-      meshRef.current.position.z = state.camera.position.z;
-    }
+  // the world is 400 units long: keep the dome centred on the camera,
+  // then drift it with the cursor so the sky itself swings as you look
+  // around — translation, not rotation, so it parallaxes against the trees
+  const drift = useRef({ x: 0, y: 0 });
+  useFrame((state, delta) => {
+    if (!meshRef.current) return;
+    const k = 1 - Math.exp(-delta * 2.6);
+    drift.current.x += (state.pointer.x * 22 - drift.current.x) * k;
+    drift.current.y += (state.pointer.y * 7 - drift.current.y) * k;
+    meshRef.current.position.set(
+      state.camera.position.x + drift.current.x,
+      drift.current.y,
+      state.camera.position.z
+    );
   });
 
   return (

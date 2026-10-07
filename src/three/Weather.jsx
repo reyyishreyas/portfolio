@@ -17,15 +17,16 @@ const RAIN_VERT = /* glsl */ `
     float speed = 9.0 + aSeed.z * 5.0;
     float h = 9.0;
     float y = mod(aSeed.y * h - uTime * speed, h);
+    // head sits on the drop; the tail vertex trails behind it along the
+    // fall line (both verts share a seed, so position.y is what splits them)
     vec3 p = uOrigin + vec3(
       (aSeed.x - 0.5) * 30.0 - y * 0.16,
       y - 1.2,
       (aSeed.z - 0.5) * 30.0 - y * 0.10
-    );
+    ) + position.y * vec3(0.16, -1.0, 0.10);
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
-    gl_Position = projectionMatrix * mv;
-    // fade in by amount: seeds above the threshold drop out
-    vA = step(aSeed.z, uAmount) * (0.20 + 0.25 * aSeed.x);
+    gl_Position = projectionMatrix * mv;    // fade in by amount: seeds above the threshold drop out
+    vA = step(aSeed.z, uAmount) * (0.30 + 0.30 * aSeed.x);
     vA *= smoothstep(0.0, 0.6, y) * smoothstep(h, h - 1.5, y);
   }
 `;

@@ -19,9 +19,10 @@ export default function IdentityReveal() {
     const [start, end] = BEATS.clearing;
     const tick = () => {
       const p = journeyState.progress;
-      // in with the light, out as the sky closes over
+      // in with the light (starts just before the clearing so the name
+      // lands early), out as the sky closes over
       const a =
-        smoothstep(start + 0.005, start + 0.028, p) *
+        smoothstep(start - 0.014, start + 0.014, p) *
         (1 - smoothstep(end - 0.004, end + 0.008, p));
       if (a !== last && elRef.current) {
         last = a;

@@ -220,6 +220,17 @@ html.lenis body {
   text-align: center;
 }
 
+.loader-stage-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(111, 211, 200, 0.85);
+  margin-bottom: 18px;
+  opacity: 0;
+  animation: loaderFade 0.5s ease-out forwards;
+}
+
 .loader-name {
   font-size: 28px;
   font-weight: 800;
@@ -259,12 +270,21 @@ html.lenis body {
 }
 
 .loader-status-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   height: 16px;
+}
+
+.loader-status-pct {
+  color: var(--text-primary);
+  min-width: 34px;
+  text-align: right;
 }
 
 @keyframes loaderFade {
@@ -1802,7 +1822,7 @@ html.lenis body {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   /* scroll travel for the pinned journey: the whole cinematic world */
-  height: 3400vh;
+  height: 3000vh;
   background: #0d130e;
 }
 
@@ -1974,6 +1994,68 @@ html.lenis body {
   animation: none;
 }
 
+/* ── Start-screen invitation ────────────────────────────────── */
+
+.forest-prompt {
+  position: absolute;
+  left: 50%;
+  bottom: calc(11vh + 104px);
+  transform: translateX(-50%);
+  z-index: 3;
+  width: min(560px, calc(100vw - 48px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 650ms ease, transform 650ms ease;
+}
+
+.forest-prompt.is-hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.forest-prompt-kicker {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(111, 211, 200, 0.85);
+}
+
+.forest-prompt-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+  font-weight: 500;
+  line-height: 1.05;
+  color: #f4efdf;
+  text-shadow: 0 2px 26px rgba(4, 7, 5, 0.9);
+}
+
+.forest-prompt-sub {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: rgba(244, 239, 223, 0.82);
+  text-shadow: 0 1px 16px rgba(4, 7, 5, 0.9);
+}
+
+.forest-prompt-hint {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 224, 168, 0.92);
+  padding: 7px 15px;
+  border: 1px solid rgba(255, 224, 168, 0.4);
+  border-radius: 999px;
+  background: rgba(9, 12, 9, 0.5);
+  backdrop-filter: blur(6px);
+  animation: forest-enter-breathe 3.6s ease-in-out infinite;
+}
+
 .forest-enter:hover,
 .forest-enter:focus-visible {
   border-color: rgba(255, 235, 190, 0.8);
@@ -2002,6 +2084,7 @@ html.lenis body {
 
 @media (prefers-reduced-motion: reduce) {
   .forest-enter { animation: none; }
+  .forest-prompt-hint { animation: none; }
 }
 
 /* ── Clearing identity reveal ────────────────────────────────── */
@@ -2143,7 +2226,7 @@ html.lenis body {
   align-items: center;
   gap: 12px;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 11.5px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: rgba(111, 211, 200, 0.85);
@@ -2167,7 +2250,7 @@ html.lenis body {
   font-family: 'Fraunces', Georgia, serif;
   font-optical-sizing: auto;
   font-weight: 400;
-  font-size: clamp(1.7rem, 2.2vw, 2.4rem);
+  font-size: clamp(1.85rem, 2.5vw, 2.6rem);
   line-height: 1.1;
   letter-spacing: 0.02em;
   color: #f4efdf;
@@ -2180,7 +2263,7 @@ html.lenis body {
 }
 
 .story-sub {
-  font-size: 14.5px;
+  font-size: 15.5px;
   line-height: 1.6;
   color: rgba(244, 239, 223, 0.82);
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55);
@@ -2188,7 +2271,7 @@ html.lenis body {
 }
 
 .story-body {
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.65;
   color: rgba(244, 239, 223, 0.72);
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.5);
@@ -2198,7 +2281,7 @@ html.lenis body {
 .story-paper {
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.55;
   color: rgba(244, 239, 223, 0.78);
   border-left: 2px solid rgba(111, 211, 200, 0.55);
@@ -2222,7 +2305,7 @@ html.lenis body {
   flex-direction: column;
   gap: 4px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgba(244, 239, 223, 0.55);
@@ -2251,7 +2334,7 @@ html.lenis body {
 .story-list li {
   position: relative;
   padding-left: 18px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.55;
   color: rgba(244, 239, 223, 0.8);
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
@@ -2271,7 +2354,7 @@ html.lenis body {
 
 .story-tags {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   line-height: 1.9;
@@ -2326,38 +2409,9 @@ html.lenis body {
   padding-bottom: 0;
 }
 
-.story-item-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 5px;
-}
-
-.story-item-head b {
-  font-size: 13.5px;
-  font-weight: 600;
-  line-height: 1.35;
-  color: #f4efdf;
-}
-
-.story-item-head em {
-  flex: none;
-  font-family: var(--font-mono);
-  font-style: normal;
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 224, 168, 0.92);
-  border: 1px solid rgba(255, 224, 168, 0.35);
-  border-radius: 999px;
-  padding: 3px 9px;
-  white-space: nowrap;
-}
-
 .story-items li p {
-  font-size: 12.5px;
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.6;
   color: rgba(244, 239, 223, 0.72);
   margin-bottom: 5px;
 }
@@ -2374,7 +2428,7 @@ html.lenis body {
 
 .story-items .story-item-tech {
   font-family: var(--font-mono);
-  font-size: 9.5px;
+  font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   line-height: 1.7;
@@ -2387,7 +2441,7 @@ html.lenis body {
   content: attr(data-label) ' · ';
   font-family: var(--font-mono);
   font-style: normal;
-  font-size: 9.5px;
+  font-size: 10.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(111, 211, 200, 0.75);
@@ -2395,7 +2449,7 @@ html.lenis body {
 
 .story-items .story-item-tags {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(244, 239, 223, 0.45);
@@ -2408,7 +2462,7 @@ html.lenis body {
 
 .story-item-links a {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
@@ -2603,10 +2657,19 @@ html.lenis body {
 .story-note {
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
-  font-size: 12.5px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.55;
   color: rgba(244, 239, 223, 0.55);
   margin-bottom: 14px;
+}
+
+/* chip sitting on its own line above a single project's detail block */
+.story-chip-row {
+  margin: -4px 0 15px;
+}
+
+.story-chip-row .story-chip-inline {
+  margin-left: 0;
 }
 
 .story-awards {
@@ -2770,23 +2833,81 @@ html.lenis body {
     text-align: left;
   }
 
+  /* one card per sheet: give it enough room to be read without a
+     second gesture, but keep a band of the world visible above */
   .story-inner {
-    max-height: 56vh;
+    max-height: 76vh;
+  }
+
+  .story-plate--left,
+  .story-plate--right,
+  .story-plate--center {
+    padding: 18px 20px calc(18px + env(safe-area-inset-bottom));
+  }
+
+  .story-title {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+    margin-bottom: 9px;
+  }
+
+  .story-kicker {
+    font-size: 10.5px;
+    margin-bottom: 9px;
+  }
+
+  .story-sub {
+    font-size: 14px;
+    margin-bottom: 11px;
+  }
+
+  .story-body {
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+
+  .story-quote {
+    line-height: 1.45;
+    margin-bottom: 12px;
+  }
+
+  .story-facets {
+    gap: 9px;
+    margin-bottom: 11px;
+  }
+
+  .story-facets span {
+    font-size: 11.5px;
+  }
+
+  .story-tags {
+    line-height: 1.6;
+  }
+
+  .story-chip-row {
+    margin: -2px 0 11px;
+  }
+
+  .story-items li {
+    padding: 9px 0;
+  }
+
+  .story-items li p {
+    margin-bottom: 4px;
+  }
+
+  .story-items .story-item-tech {
+    line-height: 1.5;
+  }
+
+  .story-facts li,
+  .story-list li {
+    font-size: 14px;
   }
 
   .story-plate--center .story-kicker,
   .story-actions {
     justify-content: flex-start;
-  }
-
-  .story-item-head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-
-  .story-item-head em {
-    white-space: normal;
   }
 
   .story-stats,
@@ -2821,6 +2942,128 @@ html.lenis body {
   .story-certs a,
   .story-certs em {
     text-align: left;
+  }
+}
+
+/* laptop / desktop: a size up on every card label so it reads from a
+   comfortable viewing distance, and the kicker (top) plus the tags, tech
+   and links rows (bottom) get a heavier weight */
+@media (min-width: 769px) {
+  .story-kicker {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .story-title {
+    font-size: clamp(2rem, 2.9vw, 3rem);
+  }
+
+  .story-sub {
+    font-size: 17px;
+  }
+
+  .story-body,
+  .story-paper {
+    font-size: 16px;
+  }
+
+  .story-quote {
+    font-size: clamp(17px, 1.75vw, 20.5px);
+  }
+
+  .story-facts li,
+  .story-list li,
+  .story-items li p {
+    font-size: 16px;
+  }
+
+  .story-note {
+    font-size: 15.5px;
+  }
+
+  .story-facets span {
+    font-size: 13.5px;
+  }
+
+  .story-facets b,
+  .story-roles span {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .story-roles b {
+    font-size: 1.2rem;
+  }
+
+  .story-os li {
+    font-size: 14px;
+  }
+
+  .story-os span,
+  .story-os a {
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .story-awards b {
+    font-size: 14.5px;
+  }
+
+  .story-awards li > span:not(.story-award-badge),
+  .story-certs a,
+  .story-certs em {
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+
+  .story-certs b {
+    font-size: 14px;
+  }
+
+  .story-bar-label {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .story-bar-value,
+  .story-bars-caption {
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  .story-stats b {
+    font-size: 1.75rem;
+  }
+
+  .story-stats span {
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  /* bottom row: tags, tech, links */
+  .story-tags,
+  .story-items .story-item-tags,
+  .story-items .story-item-tech,
+  .story-item-links a {
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  .story-items .story-item-problem::before,
+  .story-items .story-item-built::before,
+  .story-items .story-item-tech::before {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .story-link,
+  .story-chip-inline,
+  .story-award-badge,
+  .story-awards a,
+  .story-badges,
+  .story-actions a {
+    font-size: 12.5px;
+    font-weight: 600;
   }
 }
 

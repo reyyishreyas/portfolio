@@ -36,10 +36,15 @@ const ringFragment = /* glsl */ `
   }
 `;
 
-const BOARD_X = 4.2;
-const BOARD_Z = -212;
+const BOARD_X = 4.6;
+const BOARD_Z = -217.9; // where the ChessMind card sits (see StoryPlates)
 const TILE = 0.55;
 const BOARD_TOP = 0.45; // local y of the playing surface
+
+// the ensemble tower stands behind the board; depth is what the whole
+// machine needs to sink to disappear back into the forest floor
+const TOWER = { x: -1.0, z: -3.9, tiers: 8, pitch: 1.15 };
+const DEPTH = 10.7;
 
 // board-relative placement: (col, row) 0..7, row 0 is the far side
 const PIECE_LAYOUT = [
@@ -95,10 +100,53 @@ function makePiece(kind) {
 }
 
 /**
- * A chess machine half-buried beside the path: the board rises out of
- * the forest floor as the visitor approaches, pieces emerge onto it
- * one by one, and data pulses race around its edge. The project
- * discovered as a place, not a card. z ≈ −212 (projects beat).
+ * A box, placed, ready to merge with its siblings.
+ *
+ * @param {number[]} size [width, height, depth]
+ * @param {number[]} pos [x, y, z]
+ * @returns {THREE.BufferGeometry}
+ */
+function box(size, pos) {
+  return new THREE.BoxGeometry(size[0], size[1], size[2]).translate(pos[0], pos[1], pos[2]);
+}
+
+/**
+ * The eight-model stacking ensemble, read as a tower: eight lit plates
+ * stepping up a spine behind the board, so the machine's intelligence
+ * has a silhouette tall enough to read from the far end of the
+ * clearing — and tall enough to clear a phone's bottom sheet.
+ *
+ * @returns {{hard: THREE.BufferGeometry, tiers: THREE.BufferGeometry, glow: THREE.BufferGeometry}}
+ */
+function buildTower() {
+  const pack = (list) => {
+    const geo = mergeGeometries(list, false);
+    list.forEach((g) => g.dispose());
+    return geo;
+  };
+  const hard = [
+    // plinth, deep enough to hide the seam whatever the ground does
+    box([2.2, 3.0, 2.2], [TOWER.x, -1.15, TOWER.z]),
+    box([0.3, 9.0, 0.3], [TOWER.x, 4.85, TOWER.z]),
+    box([1.7, 0.2, 1.7], [TOWER.x, 9.45, TOWER.z]),
+  ];
+  const tiers = [];
+  const glow = [];
+  for (let i = 0; i < TOWER.tiers; i += 1) {
+    const y = 0.66 + i * TOWER.pitch;
+    tiers.push(box([1.5, 0.62, 1.5], [TOWER.x, y, TOWER.z]));
+    // one model, one seam of light under its plate
+    glow.push(box([1.56, 0.1, 1.56], [TOWER.x, y - 0.36, TOWER.z]));
+  }
+  return { hard: pack(hard), tiers: pack(tiers), glow: pack(glow) };
+}
+
+/**
+ * A chess machine half-buried beside the path: the ensemble tower
+ * breaks the surface first, then the board lifts clear of the floor and
+ * pieces emerge onto it one by one while data pulses race around its
+ * edge. The project discovered as a place, not a card. Sits beside the
+ * ChessMind card (z ≈ −217.9, projects beat).
  *
  * @returns {JSX.Element}
  */
@@ -162,22 +210,29 @@ export default function ChessMachine() {
     ringGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
     ringGeo.setAttribute('aU', new THREE.BufferAttribute(new Float32Array(u), 1));
 
-    return { tiles, pieces, ringGeo };
+    return { tiles, pieces, ringGeo, tower: buildTower() };
   }, []);
+
+  const y0 = groundHeight(BOARD_X, BOARD_Z);
 
   useFrame((state) => {
     const p = journeyState.progress;
-    const active = p > 0.46 && p < 0.7;
+    const active = p > 0.5 && p < 0.59;
     if (groupRef.current) groupRef.current.visible = active;
     if (!active) return;
 
     const ahead = state.camera.position.z - BOARD_Z;
+    // buried while the machine is still far ahead, standing by the time
+    // the card is centred, and taken back by the ground once it has gone
+    const rise = smoothstep(34, 18, ahead) * (1 - smoothstep(0.556, 0.578, p));
+    groupRef.current.position.y = y0 - (1 - rise) * DEPTH;
+
     if (boardRef.current) {
-      // the slab lifts out of the floor as the visitor closes in —
-      // completes at ~19 units so the whole emergence stays inside a
-      // phone's narrow horizontal FOV, not just a desktop's
-      const rise = smoothstep(36, 19, ahead);
-      boardRef.current.position.y = -(1 - rise) * 1.7;
+      // the slab lifts clear of the floor a beat after the tower has
+      // already broken the surface — completes at ~19 units so the whole
+      // emergence stays inside a phone's narrow horizontal FOV
+      const boardRise = smoothstep(36, 19, ahead);
+      boardRef.current.position.y = -(1 - boardRise) * 1.7;
     }
     // pieces surface in sequence once the board is in place
     machine.pieces.forEach((q, i) => {
@@ -188,13 +243,11 @@ export default function ChessMachine() {
     });
 
     ringUniforms.uTime.value = state.clock.elapsedTime;
-    // pulse only while the board is still ahead of the camera
+    // pulse only across the card that belongs to this board
     ringUniforms.uOpacity.value =
-      smoothstep(0.5, 0.53, p) * (1 - smoothstep(0.56, 0.585, p));
+      smoothstep(0.518, 0.534, p) * (1 - smoothstep(0.556, 0.574, p));
     if (ringMatRef.current) ringMatRef.current.visible = ringUniforms.uOpacity.value > 0.01;
   });
-
-  const y0 = groundHeight(BOARD_X, BOARD_Z);
 
   return (
     <group ref={groupRef} name="ChessMachine" visible={false} position={[BOARD_X, y0, BOARD_Z]}>
@@ -246,6 +299,22 @@ export default function ChessMachine() {
           />
         </lineLoop>
       </group>
+
+      {/* the eight-model ensemble, standing behind the board */}
+      <mesh geometry={machine.tower.hard}>
+        <meshStandardMaterial color="#39434a" metalness={0.45} roughness={0.35} />
+      </mesh>
+      <mesh geometry={machine.tower.tiers}>
+        <meshStandardMaterial color="#4a565e" metalness={0.5} roughness={0.3} />
+      </mesh>
+      <mesh geometry={machine.tower.glow}>
+        <meshStandardMaterial
+          color="#bfeef7"
+          emissive="#3fbfb0"
+          emissiveIntensity={1.2}
+          roughness={0.25}
+        />
+      </mesh>
     </group>
   );
 }

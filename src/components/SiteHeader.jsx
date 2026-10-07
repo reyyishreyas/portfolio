@@ -6,18 +6,18 @@ import { getLenis } from '../lib/smoothScroll';
 // nav targets are journey progress fractions: each link walks the
 // visitor to the beat where that part of the story is discovered
 const NAV_LINKS = [
-  { id: 'projects', label: 'Work', p: 0.55 },
-  { id: 'research', label: 'Research', p: 0.665 },
-  { id: 'astra', label: 'ASTRA', p: 0.745 },
-  { id: 'about', label: 'About', p: 0.835 },
+  { id: 'projects', label: 'Work', p: 0.5145 },
+  { id: 'research', label: 'Research', p: 0.69 },
+  { id: 'astra', label: 'ASTRA', p: 0.7505 },
+  { id: 'about', label: 'About', p: 0.8385 },
   { id: 'contact', label: 'Contact', p: 0.975 },
 ];
 
 // which progress ranges count as "showing" which beat
 const ACTIVE_RANGES = [
-  [0.5, 0.63, 'projects'],
-  [0.63, 0.7, 'research'],
-  [0.7, 0.82, 'astra'],
+  [0.5, 0.677, 'projects'],
+  [0.677, 0.732, 'research'],
+  [0.732, 0.82, 'astra'],
   [0.82, 0.9, 'about'],
   [0.9, 1.01, 'contact'],
 ];

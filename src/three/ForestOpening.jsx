@@ -13,6 +13,43 @@ import { getLenis } from '../lib/smoothScroll';
 const ForestScene = lazy(() => import('./ForestScene'));
 
 /**
+ * On-screen invitation shown before the walk begins: tells the visitor
+ * what the experience is for. Steps aside the moment they start
+ * scrolling, same threshold as the audio gate.
+ *
+ * @returns {JSX.Element}
+ */
+function ForestPrompt() {
+  const elRef = useRef(null);
+
+  useEffect(() => {
+    let raf = 0;
+    let hidden = false;
+    const tick = () => {
+      const shouldHide = journeyState.progress > 0.006;
+      if (shouldHide !== hidden && elRef.current) {
+        hidden = shouldHide;
+        elRef.current.classList.toggle('is-hidden', hidden);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  return (
+    <div className="forest-prompt" ref={elRef}>
+      <p className="forest-prompt-kicker">A living portfolio</p>
+      <p className="forest-prompt-title">Explore the jungle</p>
+      <p className="forest-prompt-sub">
+        Walk through the forest to get to know Reyyi Shreyas.
+      </p>
+      <span className="forest-prompt-hint">Scroll to walk</span>
+    </div>
+  );
+}
+
+/**
  * Static layered forest silhouette used when WebGL or reduced-motion
  * rules out the real scene. Same seeded layout as the 3D world, so the
  * character stays consistent.
@@ -114,6 +151,7 @@ export default function ForestOpening() {
         </Canvas>
         <div className="forest-vignette" aria-hidden="true" />
         <WaterVeil />
+        <ForestPrompt />
         <ForestAudioGate />
         <IdentityReveal />
         <button

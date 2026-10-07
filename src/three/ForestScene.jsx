@@ -4,8 +4,10 @@ import Vegetation from './Vegetation';
 import Rocks from './Rocks';
 import StructureField from './StructureField';
 import ChessMachine from './ChessMachine';
+import ProjectGallery from './ProjectGallery';
 import RootNetwork from './RootNetwork';
 import AstraWorld from './AstraWorld';
+import HonorsRow from './HonorsRow';
 import EnvironmentDirector from './LightingSystem';
 import Atmosphere from './Atmosphere';
 import SkyDome from './SkyDome';
@@ -82,8 +84,10 @@ export default function ForestScene({ quality }) {
       {/* computation worlds: transform → projects → research → astra */}
       <StructureField />
       <ChessMachine />
+      <ProjectGallery />
       <RootNetwork />
       <AstraWorld />
+      <HonorsRow />
       <PathVeins />
       <DataStream count={quality.mode === 'full' ? 180 : 70} />
       {quality.mode === 'full' && <ForestEffects />}

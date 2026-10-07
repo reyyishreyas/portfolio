@@ -15,13 +15,21 @@ import { detectForestQuality, smoothstep } from '../three/utils';
 
 // scroll windows are fractions of journey progress; sides follow what
 // the 3D scene shows (e.g. the chessboard stands right of the path, so
-// its plate sits left)
+// its plate sits left). Every section opens with its own title plate
+// so the visitor always knows what they have walked into, then each
+// project gets a card of its own — one at a time, never a wall of text.
 const PLATES = [
-  { id: 'chessmind', from: 0.522, to: 0.578, side: 'left' },
-  { id: 'projects', from: 0.581, to: 0.628, side: 'right' },
-  { id: 'research', from: 0.642, to: 0.698, side: 'left' },
-  { id: 'astra', from: 0.712, to: 0.757, side: 'left' },
-  { id: 'astra-work', from: 0.76, to: 0.816, side: 'left' },
+  { id: 'projects', from: 0.503, to: 0.526, side: 'right' },
+  { id: 'chessmind', from: 0.529, to: 0.556, side: 'left' },
+  { id: 'project-1', from: 0.559, to: 0.58, side: 'right' },
+  { id: 'project-2', from: 0.583, to: 0.604, side: 'left' },
+  { id: 'project-3', from: 0.607, to: 0.628, side: 'right' },
+  { id: 'project-4', from: 0.631, to: 0.652, side: 'left' },
+  { id: 'project-5', from: 0.655, to: 0.676, side: 'right' },
+  { id: 'research', from: 0.679, to: 0.701, side: 'left' },
+  { id: 'research-work', from: 0.704, to: 0.731, side: 'left' },
+  { id: 'astra', from: 0.734, to: 0.767, side: 'left' },
+  { id: 'astra-work', from: 0.77, to: 0.817, side: 'left' },
   { id: 'about', from: 0.824, to: 0.853, side: 'right' },
   { id: 'experience', from: 0.855, to: 0.879, side: 'left' },
   { id: 'skills', from: 0.881, to: 0.899, side: 'right' },
@@ -30,10 +38,72 @@ const PLATES = [
   { id: 'contact', from: 0.955, to: 1.01, side: 'center' },
 ];
 
+// the six systems, each rendered as its own plate further down so one
+// project is ever on screen at a time
+const PROJECTS = [
+  {
+    name: 'AI-Based Aerial Trajectory Prediction & Autonomous Simulation System',
+    chip: 'Flagship Project',
+    desc: 'Deep learning system built to predict aerial trajectories and run autonomous simulation visualizations.',
+    problem:
+      'Predicting aerial flight paths for autonomous systems requires handling complex temporal sequences accurately.',
+    built: 'Built a deep recurrent neural network pipeline with synthetic data generation, MinMax scaling, and interactive 2D/3D trajectory visualization comparing predictions against ground truth.',
+    tech: 'LSTM, GRU, sequence-to-sequence modeling, early stopping, dropout regularization, MinMax scaling, multi-step window sequencing',
+    tags: 'PyTorch · LSTM · GRU · Deep Learning · Python',
+    href: 'https://github.com/reyyishreyas/Astra-chronus-ai-',
+  },
+  {
+    name: 'Research Paper Analyst',
+    chip: 'Agentic RAG',
+    desc: 'Agentic RAG system that answers questions across a paper corpus with cited sources, plus a RAGAS evaluation harness.',
+    problem:
+      'Answering questions across a corpus of research papers requires responses grounded in the sources and verifiable — not fluent summaries that invent citations.',
+    built: 'Agentic RAG pipeline (LangChain + LangGraph + Gemini) with planner → retriever → verifier stages over five papers, hybrid BM25 + FAISS retrieval with reciprocal rank fusion for source-cited answers. RAGAS evaluation harness on a fixed 30-question set (faithfulness, context precision, context recall) with dense and hybrid retrieval configs, a 15-test pytest suite and a Dockerfile.',
+    tech: 'Agentic RAG, hybrid retrieval (BM25 + FAISS), reciprocal rank fusion, RAGAS evaluation, planner-verifier stages, pytest, Docker',
+    tags: 'Python · LangChain · LangGraph · RAGAS · Streamlit',
+    href: 'https://github.com/reyyishreyas/research-agent-rag',
+    live: 'https://research-agent-rag.streamlit.app',
+  },
+  {
+    name: 'TRICP',
+    chip: 'ROC AUC 0.827 · 7,043 customers',
+    desc: 'Customer retention & churn analytics platform with retention-email automation and intervention simulation.',
+    problem:
+      'Retention teams need to know which customers are about to churn and which intervention will bring them back — not just a churn score.',
+    built: 'FastAPI backend with interactive OpenAPI docs and a React/Vite frontend deployed on Vercel, retention-email automation, bulk campaigns and intervention simulation over a stacking ensemble (7,043 customers; ROC AUC 0.827). Built end-to-end with AI pair-programming (Claude Code).',
+    tech: 'Stacking ensembles, ROC AUC evaluation, FastAPI with OpenAPI docs, React/Vite, Vercel deployment, retention automation, intervention simulation',
+    tags: 'Python · FastAPI · React · Vercel · Ensembles',
+    href: 'https://github.com/reyyishreyas/churn_predictor',
+    live: 'https://churn-predictor-kappa.vercel.app',
+  },
+  {
+    name: 'SalaryPredict AI',
+    chip: 'MAE ₹41,512 → ₹5,791 · 1st Place',
+    desc: 'End-to-end salary prediction system benchmarked across five regression approaches and deployed with a Flask app.',
+    problem:
+      'Building a reliable compensation estimation system that compares multiple regression approaches on the program’s salary dataset.',
+    built: 'Delivered on the program’s ~19.5k-row, 29-feature salary dataset: benchmarked five regression approaches and shipped a stacking ensemble that cut MAE from ₹41,512 (linear regression) to ₹5,791, plus a Flask app with bulk prediction, dashboards and a fairness audit by location, department and education.',
+    tech: 'Regression benchmarking, stacking ensembles, MAE/R² evaluation, fairness auditing, bulk prediction, Flask deployment',
+    tags: 'Python · Scikit-learn · XGBoost · Flask · Stacking',
+    href: 'https://github.com/reyyishreyas/Salary_Predict_AI',
+  },
+  {
+    name: 'Smart Fixture',
+    chip: 'Backend Systems',
+    desc: 'Tournament management backend system with automated fixture generation, scheduling logic, database management and secure match-code verification.',
+    problem:
+      'Managing tournament fixtures manually is error-prone and time-consuming, especially for large-scale events.',
+    built: 'Designed a comprehensive backend system with automated fixture generation algorithms, intelligent scheduling logic, robust database architecture for match data, and secure match-code verification flow for authentication.',
+    tech: 'Scheduling algorithms, database architecture, REST API design, secure authentication flow, backend system design',
+    tags: 'Python · MySQL · Flask · Scheduling Algorithms · API Design',
+    href: 'https://github.com/reyyishreyas/smart_fixture',
+  },
+];
+
 const FACETS = [
   ['Student', 'B.E. AIML 2028 · BMSIT&M · CGPA 9.15/10'],
   ['Builder', 'Production ML systems, autonomous simulations, explainable AI'],
-  ['Researcher', 'First-author paper accepted at SICE 2026'],
+  ['Researcher', 'First-author abstract accepted at SICE 2026'],
   ['Leader', 'ASTRA President · 30-member team'],
   ['Open source', 'Merged pull requests in nilearn, PCNtoolkit and movement'],
 ];
@@ -82,7 +152,7 @@ function PlateBody({ id }) {
   if (id === 'chessmind') {
     return (
       <>
-        <p className="story-kicker">Project · the machine behind the board</p>
+        <p className="story-kicker">Project 01 of 06 · the machine behind the board</p>
         <h2 className="story-title">ChessMind AI</h2>
         <p className="story-sub">
           Adaptive chess intelligence powered by supervised ML and dynamic Elo
@@ -117,105 +187,83 @@ function PlateBody({ id }) {
     );
   }
 
+  // section title: says what this part of the walk is about before any
+  // of the individual projects arrive
   if (id === 'projects') {
-    const items = [
-      {
-        name: 'AI-Based Aerial Trajectory Prediction & Autonomous Simulation System',
-        chip: 'Flagship Project',
-        desc: 'Deep learning system built to predict aerial trajectories and run autonomous simulation visualizations.',
-        problem:
-          'Predicting aerial flight paths for autonomous systems requires handling complex temporal sequences accurately.',
-        built: 'Built a deep recurrent neural network pipeline with synthetic data generation, MinMax scaling, and interactive 2D/3D trajectory visualization comparing predictions against ground truth.',
-        tech: 'LSTM, GRU, sequence-to-sequence modeling, early stopping, dropout regularization, MinMax scaling, multi-step window sequencing',
-        tags: 'PyTorch · LSTM · GRU · Deep Learning · Python',
-        href: 'https://github.com/reyyishreyas/Astra-chronus-ai-',
-      },
-      {
-        name: 'Research Paper Analyst',
-        chip: 'Agentic RAG',
-        desc: 'Agentic RAG system that answers questions across a paper corpus with cited sources, plus a RAGAS evaluation harness.',
-        problem:
-          'Answering questions across a corpus of research papers requires responses grounded in the sources and verifiable — not fluent summaries that invent citations.',
-        built: 'Agentic RAG pipeline (LangChain + LangGraph + Gemini) with planner → retriever → verifier stages over five papers, hybrid BM25 + FAISS retrieval with reciprocal rank fusion for source-cited answers. RAGAS evaluation harness on a fixed 30-question set (faithfulness, context precision, context recall) with dense and hybrid retrieval configs, a 15-test pytest suite and a Dockerfile.',
-        tech: 'Agentic RAG, hybrid retrieval (BM25 + FAISS), reciprocal rank fusion, RAGAS evaluation, planner-verifier stages, pytest, Docker',
-        tags: 'Python · LangChain · LangGraph · RAGAS · Streamlit',
-        href: 'https://github.com/reyyishreyas/research-agent-rag',
-        live: 'https://research-agent-rag.streamlit.app',
-      },
-      {
-        name: 'TRICP',
-        chip: 'ROC AUC 0.827 · 7,043 customers',
-        desc: 'Customer retention & churn analytics platform with retention-email automation and intervention simulation.',
-        problem:
-          'Retention teams need to know which customers are about to churn and which intervention will bring them back — not just a churn score.',
-        built: 'FastAPI backend with interactive OpenAPI docs and a React/Vite frontend deployed on Vercel, retention-email automation, bulk campaigns and intervention simulation over a stacking ensemble (7,043 customers; ROC AUC 0.827). Built end-to-end with AI pair-programming (Claude Code).',
-        tech: 'Stacking ensembles, ROC AUC evaluation, FastAPI with OpenAPI docs, React/Vite, Vercel deployment, retention automation, intervention simulation',
-        tags: 'Python · FastAPI · React · Vercel · Ensembles',
-        href: 'https://github.com/reyyishreyas/churn_predictor',
-        live: 'https://churn-predictor-kappa.vercel.app',
-      },
-      {
-        name: 'SalaryPredict AI',
-        chip: 'MAE ₹41,512 → ₹5,791 · 1st Place',
-        desc: 'End-to-end salary prediction system benchmarked across five regression approaches and deployed with a Flask app.',
-        problem:
-          'Building a reliable compensation estimation system that compares multiple regression approaches on the program’s salary dataset.',
-        built: 'Delivered on the program’s ~19.5k-row, 29-feature salary dataset: benchmarked five regression approaches and shipped a stacking ensemble that cut MAE from ₹41,512 (linear regression) to ₹5,791, plus a Flask app with bulk prediction, dashboards and a fairness audit by location, department and education.',
-        tech: 'Regression benchmarking, stacking ensembles, MAE/R² evaluation, fairness auditing, bulk prediction, Flask deployment',
-        tags: 'Python · Scikit-learn · XGBoost · Flask · Stacking',
-        href: 'https://github.com/reyyishreyas/Salary_Predict_AI',
-      },
-      {
-        name: 'Smart Fixture',
-        chip: 'Backend Systems',
-        desc: 'Tournament management backend system with automated fixture generation, scheduling logic, database management and secure match-code verification.',
-        problem:
-          'Managing tournament fixtures manually is error-prone and time-consuming, especially for large-scale events.',
-        built: 'Designed a comprehensive backend system with automated fixture generation algorithms, intelligent scheduling logic, robust database architecture for match data, and secure match-code verification flow for authentication.',
-        tech: 'Scheduling algorithms, database architecture, REST API design, secure authentication flow, backend system design',
-        tags: 'Python · MySQL · Flask · Scheduling Algorithms · API Design',
-        href: 'https://github.com/reyyishreyas/smart_fixture',
-      },
-    ];
     return (
       <>
-        <p className="story-kicker">Projects · featured AI systems</p>
+        <p className="story-kicker">Projects · section 01</p>
         <h2 className="story-title">Built end to end</h2>
         <p className="story-sub">
           Machine learning systems, autonomous applications, and intelligent
           technology solutions built for real-world impact.
+        </p>
+        <p className="story-note">
+          Six systems follow — one card each. Keep walking and each project
+          steps out of the forest on its own.
+        </p>
+        <p className="story-tags">
           <span className="story-chip-inline">4+ AI Systems</span>
         </p>
+      </>
+    );
+  }
+
+  // one project per plate: its own card, its own moment on screen
+  const projectIndex = /^project-([1-5])$/.exec(id);
+  if (projectIndex) {
+    const it = PROJECTS[Number(projectIndex[1]) - 1];
+    const number = String(Number(projectIndex[1]) + 1).padStart(2, '0');
+    return (
+      <>
+        <p className="story-kicker">Project {number} of 06</p>
+        <h2 className="story-title">{it.name}</h2>
+        <p className="story-chip-row">
+          <span className="story-chip-inline">{it.chip}</span>
+        </p>
+        <p className="story-sub">{it.desc}</p>
         <ul className="story-items">
-          {items.map((it) => (
-            <li key={it.name}>
-              <div className="story-item-head">
-                <b>{it.name}</b>
-                <em>{it.chip}</em>
-              </div>
-              <p>{it.desc}</p>
-              <p className="story-item-problem" data-label="Problem">{it.problem}</p>
-              <p className="story-item-built" data-label="Built">{it.built}</p>
-              <p className="story-item-tags">{it.tags}</p>
-              <p className="story-item-tech" data-label="Technologies">{it.tech}</p>
-              <p className="story-item-links">
-                <a href={it.href} target="_blank" rel="noreferrer">
-                  GitHub ↗
+          <li>
+            <p className="story-item-problem" data-label="Problem">{it.problem}</p>
+            <p className="story-item-built" data-label="Built">{it.built}</p>
+            <p className="story-item-tags">{it.tags}</p>
+            <p className="story-item-tech" data-label="Technologies">{it.tech}</p>
+            <p className="story-item-links">
+              <a href={it.href} target="_blank" rel="noreferrer">
+                GitHub ↗
+              </a>
+              {it.live && (
+                <a href={it.live} target="_blank" rel="noreferrer">
+                  Live ↗
                 </a>
-                {it.live && (
-                  <a href={it.live} target="_blank" rel="noreferrer">
-                    Live ↗
-                  </a>
-                )}
-              </p>
-            </li>
-          ))}
+              )}
+            </p>
+          </li>
         </ul>
       </>
     );
   }
 
+  // research opens with its own title plate, then the work itself
+  // pops up as a separate card
   if (id === 'research') {
+    return (
+      <>
+        <p className="story-kicker">Research · section 02</p>
+        <h2 className="story-title">Research works</h2>
+        <p className="story-sub">
+          Peer-reviewed work and manuscripts in progress — this is where the
+          forest turns from what I build into what I investigate.
+        </p>
+        <p className="story-note">
+          One work follows on its own card, with the acceptance status stated
+          exactly as it stands today.
+        </p>
+      </>
+    );
+  }
+
+  if (id === 'research-work') {
     return (
       <>
         <p className="story-kicker">Research · first author</p>
@@ -274,7 +322,7 @@ function PlateBody({ id }) {
         <div className="story-stats story-stats--three">
           <span><b>30</b>Member team</span>
           <span><b>6</b>Manuscript submissions</span>
-          <span><b>3</b>Accepted at SICE 2026</span>
+          <span><b>3</b>SICE 2026 abstracts</span>
         </div>
         <p className="story-tags">
           Technical Planning · System Design · Research Mentoring · Team Coordination
@@ -290,7 +338,7 @@ function PlateBody({ id }) {
         <ul className="story-list">
           <li>
             Led a 30-member team through 6 research manuscript submissions — 3
-            accepted at SICE 2026, including my first-author paper.
+            abstracts accepted at SICE 2026, including my first-author abstract.
           </li>
           <li>
             Leading technical initiatives and architecture decisions for the
@@ -567,9 +615,15 @@ export default function StoryPlates() {
       PLATES.forEach((plate) => {
         const el = refs.current[plate.id];
         if (!el) return;
+        // fades scale with the plate's own width so a short single-project
+        // card still holds at full opacity instead of spending its whole
+        // window cross-fading
+        const width = plate.to - plate.from;
+        const fadeIn = Math.min(0.01, width * 0.3);
+        const fadeOut = Math.min(0.012, width * 0.34);
         const v =
-          smoothstep(plate.from, plate.from + 0.01, p) *
-          (1 - smoothstep(plate.to - 0.012, plate.to + 0.004, p)) *
+          smoothstep(plate.from, plate.from + fadeIn, p) *
+          (1 - smoothstep(plate.to - fadeOut, plate.to + 0.004, p)) *
           exit;
         if (v === last[plate.id]) return;
         last[plate.id] = v;

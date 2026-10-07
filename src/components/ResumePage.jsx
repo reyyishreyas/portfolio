@@ -106,7 +106,7 @@ export default function ResumePage() {
             </div>
             <p className="resume-entry-sub">Technical Head · Sep 2025 – Sep 2026</p>
             <ul className="resume-bullets">
-              <li>Led a 30-member team through 6 research manuscript submissions (3 accepted at SICE 2026, incl. my first-author work); ran Git and AI tooling sessions.</li>
+              <li>Led a 30-member team through 6 research manuscript submissions (3 abstracts accepted at SICE 2026, incl. my first-author work); ran Git and AI tooling sessions.</li>
             </ul>
           </div>
         </section>
