@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local only — AI briefs, editor config and personal source material.
+# None of it is needed to build or serve the site.
+/prompt.md
+/prompt1.md
+/opencode.json
+/astra_logo_nobg.jpeg
+/astra_logo_withbg.jpeg
+/assets/
+/content/
+# Vite template readme; drop this line if you write a real one.
+/README.md
