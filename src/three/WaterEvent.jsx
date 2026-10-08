@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { journeyState } from './journey';
+import { journeyState, QA_HOOKS } from './journey';
 import { submergedAmount, waterLevel } from './beats';
 import { mulberry32, smoothstep } from './utils';
 
@@ -212,7 +212,7 @@ export default function WaterEvent() {
       });
     }
 
-    if (import.meta.env.DEV) {
+    if (QA_HOOKS) {
       journeyState.water = {
         level: Number(level.toFixed(2)),
         sub: Number(sub.toFixed(2)),

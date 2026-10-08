@@ -9,9 +9,16 @@
 /** @type {{progress: number}} written by ScrollTrigger, read per frame */
 export const journeyState = { progress: 0 };
 
-// QA hook: scripts read the live progress directly — in dev, and on the
-// deployed site, so the production bundle can be checked after a release
-window.__journey = journeyState;
+// QA hooks: scripts read live state directly. On in dev, and on the
+// deployed bundle when the page is opened with ?qa, so a release can be
+// checked without shipping debug state to every visitor.
+export const QA_HOOKS =
+  import.meta.env.DEV ||
+  (typeof window !== 'undefined' && window.location.search.includes('qa'));
+
+if (QA_HOOKS) {
+  window.__journey = journeyState;
+}
 
 const START_Z = 16;
 const END_Z = -365;

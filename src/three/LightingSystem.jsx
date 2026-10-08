@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { journeyState } from './journey';
+import { journeyState, QA_HOOKS } from './journey';
 import { skyMaterial, sunDiscMaterial } from './materials';
 import { windUniforms } from './wind';
 
@@ -124,7 +124,7 @@ export default function EnvironmentDirector({ shadows }) {
     if (ambRef.current) ambRef.current.intensity = state.amb;
     // god-ray disc dims under cloud, flares in dawn
     sunDiscMaterial.color.copy(state.disc);
-    if (import.meta.env.DEV) {
+    if (QA_HOOKS) {
       journeyState.env = {
         fog: `#${state.fog.getHexString()}`,
         d: Number(state.d.toFixed(4)),

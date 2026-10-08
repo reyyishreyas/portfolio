@@ -18,12 +18,13 @@ import Weather from './Weather';
 import WaterEvent from './WaterEvent';
 import Wildlife from './Wildlife';
 import { windUniforms } from './wind';
+import { QA_HOOKS } from './journey';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
 
 /**
- * Dev-only bridge: hands the live scene to QA scripts so they can
- * inspect or isolate systems without guesswork.
+ * QA bridge: hands the live scene to QA scripts so they can inspect or
+ * isolate systems without guesswork (dev, or ?qa on the deployed site).
  *
  * @returns {null}
  */
@@ -32,7 +33,7 @@ function DevBridge() {
   const camera = useThree((s) => s.camera);
   const gl = useThree((s) => s.gl);
   useEffect(() => {
-    if (import.meta.env.DEV) {
+    if (QA_HOOKS) {
       window.__scene = scene;
       window.__camera = camera;
       window.__gl = gl;

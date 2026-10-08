@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { journeyState, pathAt } from './journey';
+import { journeyState, pathAt, QA_HOOKS } from './journey';
 import { groundHeight } from './utils';
 
 const START_Z = 17.9;
@@ -73,7 +73,7 @@ export default function CameraController() {
       yawRef.current + smoothed.current.yaw + idleYaw + introYaw,
       0
     );
-    if (import.meta.env.DEV) {
+    if (QA_HOOKS) {
       journeyState.cam = cam.position.z;
       journeyState.yaw = cam.rotation.y;
     }
