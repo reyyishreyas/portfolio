@@ -4,6 +4,7 @@ import Loader from './components/Loader';
 import SiteHeader from './components/SiteHeader';
 import StoryPlates from './components/StoryPlates';
 import ForestEdge from './components/ForestEdge';
+import ForestLoop from './components/ForestLoop';
 import ResumePage from './components/ResumePage';
 import { Reveal } from './components/Reveal';
 import { initSmoothScroll } from './lib/smoothScroll';
@@ -57,6 +58,9 @@ function PortfolioApp() {
           </div>
         </Reveal>
       </div>
+
+      {/* the walk closes on itself: mist over the end of the page */}
+      <ForestLoop />
 
       {/* forest-first boot readout: a scrim over the live scene */}
       {loading && <Loader onComplete={() => setLoading(false)} />}

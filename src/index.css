@@ -3181,6 +3181,30 @@ html.is-loading .forest-audio-gate {
   z-index: 1;
 }
 
+/* ── The endless walk: mist that closes the loop ─────────────── */
+
+/* open page below the credits, so the closing words stay readable
+   while the mist settles in over them */
+.forest-loop-space {
+  height: 44vh;
+}
+
+/* full-page cover, shut by the last stretch of scroll. The walk back to
+   the first beat happens underneath it, so the restart is never seen.
+   Sits above the world, the plates and the nav; below the boot readout. */
+.forest-loop-mist {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+  background:
+    radial-gradient(86% 56% at 50% 76%, rgba(34, 50, 37, 0.55), rgba(34, 50, 37, 0) 74%),
+    radial-gradient(128% 86% at 50% 44%, rgba(19, 29, 21, 0.4), rgba(9, 14, 10, 0.94) 80%),
+    linear-gradient(180deg, #0a100c 0%, #0d130e 54%, #0a100c 100%);
+}
+
 /* ── Projects discovered in the world ───────────────────────── */
 
 .in-world .section-label {
