@@ -200,7 +200,16 @@ html.lenis body {
 .loader-overlay {
   position: fixed;
   inset: 0;
-  background: var(--bg-void);
+  /* the forest shows through: this readout belongs to the jungle */
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(6, 10, 7, 0.82),
+      rgba(6, 10, 7, 0.38) 40%,
+      rgba(6, 10, 7, 0.38) 60%,
+      rgba(6, 10, 7, 0.88)
+    ),
+    radial-gradient(130% 85% at 50% 48%, transparent 24%, rgba(4, 7, 5, 0.8) 100%);
   z-index: 9999;
   display: flex;
   justify-content: center;
@@ -218,6 +227,21 @@ html.lenis body {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  /* sits over moving foliage: keep the readout legible on any frame */
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9), 0 0 6px rgba(0, 0, 0, 0.7);
+}
+
+/* the page is held still until the jungle is up and the readout clears */
+html.is-loading {
+  overflow: hidden;
+}
+
+html.is-loading .nav-header,
+html.is-loading .forest-prompt,
+html.is-loading .forest-skip,
+html.is-loading .forest-audio-gate {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .loader-stage-tag {
@@ -1821,8 +1845,10 @@ html.lenis body {
   position: relative;
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  /* scroll travel for the pinned journey: the whole cinematic world */
-  height: 3000vh;
+  /* scroll travel for the pinned journey: the whole cinematic world.
+     Halved from 3000vh so the walk before the name reveal and after it
+     stays short enough that nobody bails halfway. */
+  height: 1500vh;
   background: #0d130e;
 }
 

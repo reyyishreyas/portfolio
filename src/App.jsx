@@ -20,9 +20,13 @@ function PortfolioApp() {
     return undefined;
   }, [loading]);
 
-  if (loading) {
-    return <Loader onComplete={() => setLoading(false)} />;
-  }
+  // the jungle mounts behind the boot readout, so hold the page still
+  // until the forest has had a chance to appear
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('is-loading', loading);
+    return () => root.classList.remove('is-loading');
+  }, [loading]);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -30,7 +34,9 @@ function PortfolioApp() {
       <div className="portfolio-wrapper">
         <SiteHeader />
 
-        {/* the world: one continuous scroll journey */}
+        {/* the world: one continuous scroll journey. Mounts immediately —
+            the boot readout below is layered over the forest, not over a
+            blank screen. */}
         <Suspense fallback={null}>
           <ForestOpening />
         </Suspense>
@@ -51,6 +57,9 @@ function PortfolioApp() {
           </div>
         </Reveal>
       </div>
+
+      {/* forest-first boot readout: a scrim over the live scene */}
+      {loading && <Loader onComplete={() => setLoading(false)} />}
     </MotionConfig>
   );
 }
