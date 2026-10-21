@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { MotionConfig } from 'motion/react';
+import { Analytics } from '@vercel/analytics/react';
 import Loader from './components/Loader';
 import SiteHeader from './components/SiteHeader';
 import StoryPlates from './components/StoryPlates';
@@ -64,6 +65,7 @@ function PortfolioApp() {
 
       {/* forest-first boot readout: a scrim over the live scene */}
       {loading && <Loader onComplete={() => setLoading(false)} />}
+      <Analytics />
     </MotionConfig>
   );
 }
@@ -72,7 +74,12 @@ export default function App() {
   // /resume serves the print-first resume page; everything else is the site
   const path = window.location.pathname.replace(/\/+$/, '');
   if (path === '/resume') {
-    return <ResumePage />;
+    return (
+      <>
+        <ResumePage />
+        <Analytics />
+      </>
+    );
   }
   return <PortfolioApp />;
 }
